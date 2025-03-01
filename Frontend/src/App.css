@@ -1,0 +1,36 @@
+.icon-wrap{
+    left: 10px;
+    top: 25px;
+   position: relative;
+    z-index: 4;
+
+   
+
+}
+.wrap{
+    display: flex;
+    width: 70vw;
+    margin: 0;
+}
+/* Black Scrollbar */
+
+::-webkit-scrollbar {
+    width: 17px;
+    position: relative;
+    right: 330px; /* Scrollbar width */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #777676;
+    border-radius: 5px; /* Track color (dark gray/black) */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #2e2e2e; /* Thumb color (black) */
+    border-radius: 2px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #121111; /* Slightly lighter black on hover */
+  }
+  

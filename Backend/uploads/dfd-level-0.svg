@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <!-- Background -->
+  <rect width="800" height="500" fill="#f8f9fa" />
+  
+  <!-- Central Process -->
+  <circle cx="400" cy="250" r="100" fill="#6c8ebf" stroke="#000000" stroke-width="2" />
+  <text x="400" y="250" font-family="Arial" font-size="18" text-anchor="middle" fill="#ffffff">AI-Based Mental Health Assistant</text>
+  
+  <!-- External Entities -->
+  <!-- User -->
+  <rect x="50" y="100" width="120" height="60" fill="#d5e8d4" stroke="#000000" stroke-width="2" />
+  <text x="110" y="135" font-family="Arial" font-size="16" text-anchor="middle">User</text>
+  
+  <!-- Healthcare Provider -->
+  <rect x="50" y="350" width="120" height="60" fill="#d5e8d4" stroke="#000000" stroke-width="2" />
+  <text x="110" y="385" font-family="Arial" font-size="16" text-anchor="middle">Healthcare Provider</text>
+  
+  <!-- Third-Party APIs -->
+  <rect x="630" y="350" width="120" height="60" fill="#d5e8d4" stroke="#000000" stroke-width="2" />
+  <text x="690" y="385" font-family="Arial" font-size="16" text-anchor="middle">Third-Party APIs</text>
+  
+  <!-- Mobile/Web App -->
+  <rect x="630" y="100" width="120" height="60" fill="#d5e8d4" stroke="#000000" stroke-width="2" />
+  <text x="690" y="135" font-family="Arial" font-size="16" text-anchor="middle">Mobile/Web App</text>
+  
+  <!-- Data Flow Arrows -->
+  <!-- User to AI Assistant -->
+  <line x1="170" y1="130" x2="300" y2="210" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="235" y="150" font-family="Arial" font-size="14" text-anchor="middle">User inputs</text>
+  
+  <!-- AI Assistant to User -->
+  <line x1="300" y1="190" x2="170" y2="130" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="235" y="180" font-family="Arial" font-size="14" text-anchor="middle">Responses</text>
+  
+  <!-- AI Assistant to Healthcare Provider -->
+  <line x1="320" y1="310" x2="170" y2="350" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="245" y="350" font-family="Arial" font-size="14" text-anchor="middle">Reports/Alerts</text>
+  
+  <!-- AI Assistant to Third-Party APIs -->
+  <line x1="480" y1="310" x2="630" y2="350" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="555" y="350" font-family="Arial" font-size="14" text-anchor="middle">Service requests</text>
+  
+  <!-- Third-Party APIs to AI Assistant -->
+  <line x1="630" y1="370" x2="480" y2="330" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="555" y="370" font-family="Arial" font-size="14" text-anchor="middle">Data/Confirmations</text>
+  
+  <!-- Mobile/Web App to AI Assistant -->
+  <line x1="630" y1="130" x2="500" y2="210" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="565" y="150" font-family="Arial" font-size="14" text-anchor="middle">Interface</text>
+  
+  <!-- AI Assistant to Mobile/Web App -->
+  <line x1="500" y1="190" x2="630" y2="130" stroke="#000000" stroke-width="2" marker-end="url(#arrowhead)" />
+  <text x="565" y="180" font-family="Arial" font-size="14" text-anchor="middle">Display data</text>
+  
+  <!-- Arrowhead marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#000000" />
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="40" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">Level 0: Context Diagram</text>
+  <text x="400" y="70" font-family="Arial" font-size="18" text-anchor="middle">AI-Based Mental Health Assistant</text>
+</svg>
