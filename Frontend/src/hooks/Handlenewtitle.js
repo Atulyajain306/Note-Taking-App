@@ -14,7 +14,12 @@ const Handlenewtitle = () => {
                throw new Error(data.error)
               }
                if(data.title===""){
-                   data.title="Engineering Assignment Note" 
+                  if(data.isAudio){  
+                   data.title="Engineering Assignment Audio"
+                  }
+                  else{
+                    data.title="Engineering Assignment Note"
+                  } 
                }
                  setsingleMessage((prev)=>({...prev,title:data.title}));
 const filtermess=savedmessages.map((msg)=>(msg._id === data._id ? {...msg,title:data.title} :msg))

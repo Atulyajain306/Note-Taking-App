@@ -9,7 +9,7 @@ const HandleAudiomessages = () => {
                     headers:{"Content-Type":"application/json"},
                     body:JSON.stringify({transcript})
                  });
-                let data=await res.json()  
+                let data=await res.json();  
                if(data.error){
                 throw new Error(data.error);
                }

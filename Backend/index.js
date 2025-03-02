@@ -19,6 +19,7 @@ import Getbody from "./controllers/Getbody.js";
 import Edittitle from "./controllers/Edittitle.js";
 import Getpic from "./controllers/Getpic.js";
 import User from "./models/User.js";
+import Audio from "./models/Audio.js";
 dotenv.config();
 const app=express()
 app.use(express.json());
@@ -50,8 +51,14 @@ const upload=multer({storage:storage});
 app.post("/upload/:id",upload.single("image"),async function(req,res){
          const {id}=req.params;
          const user=await Message.findByIdAndUpdate(id,{ImageURL:`/uploads/${req.file.filename}`},{new:true});
+         const u=await Audio.findByIdAndUpdate(id,{ImageURL:`/uploads/${req.file.filename}`},{new:true});
           console.log(user); 
+          if(!user){
+            return res.status(200).json(u.ImageURL);
+          }
+          else{
       return res.status(200).json(user.ImageURL);
+        }
     });
 
 app.post("/upload/profilepic/:id",upload.single("Profile"),async function(req,res){

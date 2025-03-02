@@ -2,7 +2,9 @@ import React from 'react'
 import toast from 'react-hot-toast';
 import { MdContentCopy } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
+import { MdAudiotrack } from "react-icons/md";
 import { FaStar } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
 import { TbCircleLetterTFilled } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 import { CiStar } from "react-icons/ci";
@@ -18,7 +20,6 @@ import HandleEdit from '../hooks/HandleEdit';
 import HandleFavourate from '../hooks/HandleFavourate';
 import Deletefavourite from '../hooks/Deletefavourite';
 import Handlefile from '../hooks/Handlefile';
-import { useActionState } from 'react';
 import Handlenewtitle from '../hooks/Handlenewtitle';
 import Handlenewbody from '../hooks/Handlenewbody';
 const Card = ({bgtitle,setbgtitle,Edit}) => {
@@ -152,10 +153,10 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
      { savedmessages && savedmessages.length >0 ?  
      savedmessages.map((msg,idx)=>(
      <div key={idx} onDoubleClick={()=>{HandlenewWindow(msg)}} className='w-[260px] h-[50vh] border hover:bg-stone-200 cursor-pointer border-slate-400  rounded-lg bg-neutral-100 relative'>   
-     <TbCircleLetterTFilled className='flex justify-center relative left-52 top-3 size-10'  />
+    {msg.isAudio ? <FaPlay  className='flex justify-center relative left-52 top-3 size-9' /> :<TbCircleLetterTFilled className='flex  justify-center relative left-52 top-3 size-10'  />}
         <div className='relative bottom-4 left-3 text-gray-500'>{time(msg.createdAt)}</div>
       <div className='font-bold py-4 px-2'>{title && isStarred===idx  ? ( <div className='flex gap-x-1'> <input value={newtitle} onChange={(e)=>{setnewtitle(e.target.value)}} className='w-[10vw] border border-black rounded-md text-gray-500 px-2 py-1' type="text" /> <div onClick={()=>{HandleChange(newtitle,msg._id)}} className='text-white justify-center items-center rounded-xl px-2 py-1 bg-gray-600'>Save</div></div> )
-     : <div className='flex flex-wrap px-2 break-all  overflow-y-hidden overflow-x-clip'> {msg.title}</div>}</div>
+     : <div className='flex flex-wrap  px-1 break-all overflow-y-hidden  overflow-x-clip'> {msg.title}</div>}</div>
               <div className='w-56 overflow-hidden'>
         <p className='relative left-5 flex flex-wrap-reverse px-2   overflow-y-hidden overflow-x-auto break-all mx-1 text-wrap h-[29vh] text-slate-500'>{msg.message}</p></div>
         <MdContentCopy id='copy' className='absolute top-[46vh] left-48'  onClick={()=>{Copy(msg.message)}} /> 

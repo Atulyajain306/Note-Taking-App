@@ -23,7 +23,11 @@ const Handlecards = () => {
        });
        let data=await res.json();
          console.log(data);
-        setsavedmessages(data);
+         const w = data.map((msg) => ({
+          ...msg, // Retains all properties of msg
+          title: msg.title?.length ? msg.title : msg.isAudio ? "Engineering Assignment Audio" : "Engineering Assignment Note",
+        })); 
+        setsavedmessages(w);
         const idsOnly = savedmessages.map((msg) => ({ _id: msg._id,favourite:msg.favoutite }));
         setfavourates(idsOnly);
 
