@@ -23,7 +23,7 @@ favoutite:{
     },
 ImageURL:{
     type:String,
-    }
+    }   
 },{
     timestamps:true
 });

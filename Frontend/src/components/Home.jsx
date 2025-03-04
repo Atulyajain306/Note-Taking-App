@@ -30,7 +30,7 @@ const Home = () => {
        const [filtermessage, setfiltermessage] = useState({});
        const [www, setwww] = useState({});
        const [ww, setww] = useState({});
-    const {Listening,transcript,startListening,stopListening}=Handlespeechtotext({continuous:true});
+  const {Listening,transcript,startListening,stopListening,Load,setLoad}=Handlespeechtotext({continuous:true});
        const {savedmessages,setsavedmessages,profilepic}=useAuthContext();
        const Edit=["Create Notes","No Favourites Added","No Related titles Found"];
         const [bgtitle, setbgtitle] = useState("Create Notes");
@@ -142,8 +142,10 @@ const Home = () => {
           Listening ? voiceInput() : startListening()
      }
      const voiceInput=()=>{
+         setmessage("");
+         setLoad(true);
           Audiomessage(transcript);
-            stopListening();
+            stopListening(); 
      }
   return (
     <>
@@ -181,9 +183,9 @@ const Home = () => {
      { loading ? <ImSpinner8 className="h-8 w-8 relative z-20 left-[40vw] top-56 animate-spin text-slate-800" /> :  <Card bgtitle={bgtitle} setbgtitle={setbgtitle} Edit={Edit} />}
         
          <div className='absolute right-16  top-[86vh] flex items-center justify-center '>
-       { Loading ? < ImSpinner3 className="h-6 w-6 relative right-[51vw] z-20 justify-center items-center top-1 animate-spin text-slate-800" />:<FaPencilAlt className='z-10 fixed left-[25.5vw]' onClick={noteCreation} /> } 
+       { Loading ||Load ? < ImSpinner3 className="h-6 w-6 relative right-[51vw] z-20 justify-center items-center top-1 animate-spin text-slate-800" />:<FaPencilAlt className='z-10 fixed left-[25.5vw]' onClick={noteCreation} /> } 
           
-          <textarea type="text" value={message} id='textarea'  onChange={(e)=>{
+          <textarea type="text" value={ Listening? message + (transcript.length ? (message.length ? " ": "")+ transcript : "") : message} id='textarea'  onChange={(e)=>{
             setmessage(e.target.value);
              e.target.style.height = 'auto';
             e.target.style.height = e.target.scrollHeight + 'px';

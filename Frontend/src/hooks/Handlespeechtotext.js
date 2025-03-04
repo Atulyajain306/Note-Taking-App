@@ -1,6 +1,7 @@
 import { useRef,useState,useEffect } from "react";
 
 const Handlespeechtotext = (options) => {
+    const [Load, setLoad] = useState(false)
      const [Listening, setListening] = useState(false);
      const [transcript, settranscript] = useState("");
      const Recognitionref=useRef(null);
@@ -17,9 +18,9 @@ useEffect(() => {
      recognition.lang=options.lang || "en-US"
      recognition.continuous=options.continuous || false
 
-     if("webkitSpeechGrammerList" in window){
+     if("webkitSpeechGrammarList" in window){
      const grammer="#JSGF V1.0; grammer punctuation; public <punc>= . | , | ? | ! | ; | : ;"
-     const speechRecognitionList=new window.webkitSpeechGrammerList();
+     const speechRecognitionList=new window.webkitSpeechGrammarList();
       speechRecognitionList.addFromString(grammer,1);
       recognition.grammars = speechRecognitionList
      }
@@ -57,9 +58,10 @@ const stopListening=()=>{
     if(Recognitionref.current && Listening){
         Recognitionref.current.stop();
         setListening(false);
+        setLoad(false);
     }
 }
-   return {Listening,transcript,startListening,stopListening}
+   return {Listening,transcript,startListening,stopListening,Load,setLoad}
 
 }
 export default Handlespeechtotext

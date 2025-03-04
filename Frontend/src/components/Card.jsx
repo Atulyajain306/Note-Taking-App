@@ -2,9 +2,9 @@ import React from 'react'
 import toast from 'react-hot-toast';
 import { MdContentCopy } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
-import { MdAudiotrack } from "react-icons/md";
 import { FaStar } from "react-icons/fa";
 import { FaPlay } from "react-icons/fa";
+import SpeechPlayer from './SpeechPlayer';
 import { TbCircleLetterTFilled } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 import { CiStar } from "react-icons/ci";
@@ -44,7 +44,9 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
     const [editscript, seteditscript] = useState(false);
     const [editbody, seteditbody] = useState(false);
     const [editmessage, seteditmessage] = useState(false);
-    const [editnewbody, seteditnewbody] = useState(null)
+    const [editnewbody, seteditnewbody] = useState(null);
+    const [action, setaction] = useState(false);
+  
   const HandlenewWindow = (msg) => {
     setSelectedCard(msg);
     setsingleMessage(msg);
@@ -134,11 +136,14 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
        seteditnewbody("");
   }
   const Handletitleedit=(id)=>{
-      
-     seteditscript(false);
+      seteditscript(false);
      cardtitlenew(popuptitle,id);
      setpopuptitle("");
   }
+  
+
+
+
   useEffect(() => {
    FetchCards();
   }, [])
@@ -147,7 +152,6 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
   }, [singleMessage])
   
   
-    
   return (
        <div className='flex gap-x-2 w-[80vw] flex-wrap gap-y-2 h-[70vh] overflow-y-auto   overflow-x-hidden'> 
      { savedmessages && savedmessages.length >0 ?  
@@ -169,22 +173,19 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
             </div>)}
          </div>
      )): <div className='absolute left-[50vw] top-[45vh] text-4xl font-bold'>{bgtitle}</div> } 
-     {selectedCard && (
-        <div
-      className="fixed inset-0 flex items-center z-30 justify-center bg-black bg-opacity-50">
-          <div
-            className="bg-white p-6 rounded-lg shadow-lg w-[80vw] h-[70vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
+   { selectedCard ? (
+<div className="fixed inset-0 flex items-center z-30 justify-center bg-black bg-opacity-50"> <div  className="bg-white p-6 rounded-lg shadow-lg w-[80vw] h-[74vh]" 
+             onClick={(e) => e.stopPropagation()} >
              <button  onClick={closePopup} className='fixed left-[87vw] top-[16vh] justify-center '><RxCross2 className='size-8' /></button>
-             <h1 className='text-3xl m-3 font-bold flex gap-x-4 items-center'>Transcript <FaRegStickyNote /> </h1>
+             <h1 className='text-3xl m-3 font-bold flex gap-x-4 items-center'>Transcript <FaRegStickyNote /> <p className='text-lg font-semibold text-slate-500'>{time(singleMessage.createdAt)}</p> </h1>
             <h2 onDoubleClick={()=>{HandlenewChange(singleMessage.title)}} className={`text-2xl font-bold rounded-lg w-[77vw] flex ${editscript ? null : "border border-black"} justify-between  px-2 py-2`}>{ editscript ?  
-            (<form onSubmit={(e)=>{Handletitleedit(singleMessage._id),e.preventDefault()}} className='w-full mx-2' ><input value={popuptitle} className='bg-neutral-100 w-full rounded-lg relative h-12 bottom-2 px-2 py-2 border border-black'  onChange={(e)=>{ setpopuptitle(e.target.value)}} /></form>) : singleMessage.title} <FaRegCopy className='cursor-pointer' onClick={()=>{Copy(singleMessage.title)}} /></h2>
-            <p onDoubleClick={()=>{HandlemessageChange(singleMessage.message)}} className={`text-gray-600 mt-4 border-zinc-300 ${editmessage ? null :"border border-gray-800 w-[75vw] h-[30vh]"}   overflow-y-auto  rounded-lg px-2 py-1`}>{editmessage ? <textarea value={editnewbody} onChange={(e)=>seteditnewbody(e.target.value)} className='w-[75vw] resize-none overflow-y-auto px-2 py-3 h-[30vh] border border-black rounded-lg bg-zinc-100 text-gray-600' /> :singleMessage.message} </p>
+        (<form onSubmit={(e)=>{Handletitleedit(singleMessage._id),e.preventDefault()}} className='w-full mx-2' ><input value={popuptitle} className='bg-neutral-100 w-full rounded-lg relative h-12 bottom-2 px-2 py-2 border border-black'  onChange={(e)=>{ setpopuptitle(e.target.value)}} /></form>) : singleMessage.title} <FaRegCopy className='cursor-pointer' onClick={()=>{Copy(singleMessage.title)}} /></h2>
+        {singleMessage.isAudio ? <SpeechPlayer message={singleMessage.message} /> : null}
+        <p onDoubleClick={()=>{HandlemessageChange(singleMessage.message)}} className={`text-gray-600 mt-4 border-zinc-300 ${editmessage ? null :"border border-gray-800 w-[75vw] h-[30vh]"}   overflow-y-auto  rounded-lg px-2 py-1`}>{editmessage ?<textarea value={editnewbody} onChange={(e)=>seteditnewbody(e.target.value)} className='w-[75vw] resize-none overflow-y-auto px-2 py-3 h-[30vh] border border-black rounded-lg bg-zinc-100 text-gray-600' /> :singleMessage.message} </p>
             <MdContentCopy className='relative cursor-pointer size-4 left-[76vw] bottom-[30vh] ' onClick={()=>{Copy(singleMessage.message)}} />
-              <div className='flex gap-x-5'> 
+           <div className='flex gap-x-5'> 
              {singleMessage.ImageURL && (<>
-               <img src={`/api/${singleMessage.ImageURL}`} id='img' className='w-60 cursor-pointer h-28' onClick={Enlarge} />
+               <img src={`/api/${singleMessage.ImageURL}`} id='img' className={`w-60 cursor-pointer ${singleMessage.isAudio ? "h-24" : "h-28"} rounded-md`} onClick={Enlarge} />
              </>)}
    {enlarge ? (<div className='absolute top-24 right-[20vw] z-50 flex bg-opacity-100 m-1'><div className='bg-stone-200 px-6 py-8  rounded-xl shadow-4xl w-[60vw] h-[75vh] '>
     <RxCross2 onClick={Delarge} className='size-8 w-fit relative left-[55vw] bottom-4  z-40 cursor-pointer' />
@@ -199,16 +200,12 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
    <GoPlus  className='mt-5 size-16 cursor-pointer border rounded-lg border-black ' /></label>
       </div>
     <button onClick={()=>{HandleFile(singleMessage._id)}} className='relative top-8 ml-3 cursor-pointer text-black px-3 py-2 h-10 font-bold bg-red-600 rounded-lg'>Save</button>
-    <button onClick={()=>{SavenewTitle(singleMessage._id)}} className={`text-white bg-green-600 px-4 h-10 rounded-xl font-bold absolute left-[81vw] top-[68vh] ${editbody ? null :'hidden'} `} >Save Text</button>
+    <button onClick={()=>{SavenewTitle(singleMessage._id)}} className={`text-white bg-green-600 px-4 h-10 rounded-xl font-bold absolute left-[81vw] top-[75vh] ${editbody ? null :'hidden'} `} >Save Text</button>
             </div>
           </div>
-        </div>
-      )}
-    </div> 
-
-   
-
-  )
-}
+         </div> ) : null }   
+    </div>   
+  );
+};
 
 export default Card
