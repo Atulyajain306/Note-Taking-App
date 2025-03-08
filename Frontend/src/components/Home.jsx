@@ -142,16 +142,18 @@ const Home = () => {
   return (
     <>
       <div className='flex'>
-     <div className='w-[18%]  min-h-[94vh] border m-3 border-slate-500 rounded-xl '>
-   <a  className='p-4 cursor-pointer  text-xl flex items-center gap-x-2 font-bold'> <MdOutlineSpeakerNotes size={40} /> All Notes</a> 
-         <div className='w-72 relative left-2 overflow-hidden h-[1px]  bg-slate-400'></div> 
-         <div onClick={setColor} className={`rounded-3xl ${color ? null :'text-purple-500 bg-neutral-200' } items-center hover:bg-neutral-200 cursor-pointer hover:text-purple-400 m-2 font-semibold flex gap-x-3 hover:cursor-pointer  bg text-xl py-3 px-4`} > <IoHomeSharp size={30}  /> Home
+     <div className=' md:w-[18%] w-28  min-h-[94vh] border m-3 border-slate-500 rounded-xl '>
+   <a  className='p-4 cursor-pointer hidden text-xl md:flex items-center gap-x-2 font-bold'> <MdOutlineSpeakerNotes size={40} /> All Notes</a>
+   <a className='md:hidden felx '><MdOutlineSpeakerNotes className='size-10 mx-6 my-2'  /></a> 
+    <div className='md:w-72 w-24 relative left-2 overflow-hidden h-[1px]  bg-slate-400'></div> 
+    <div onClick={setColor} className={`rounded-3xl ${color ? null :'text-purple-500 bg-neutral-200'} items-center hover:bg-neutral-200 cursor-pointer hover:text-purple-400 m-2 md:flex hidden font-semibold  gap-x-3 hover:cursor-pointer  bg text-xl py-3 px-4`} > <IoHomeSharp size={30}  /> Home </div>
+         <div onClick={setColor} className='md:hidden flex ' > <IoHomeSharp className={`size-10 cursor-pointer mx-6 hover:text-purple-400 ${color ? null :'text-purple-500 bg-neutral-200' }  px-2 py-1 my-2 rounded-md`}   /></div>
+       <div onClick={changeColor} className={`rounded-3xl ${color ? 'text-purple-500 bg-neutral-200' :null} items-center m-2 font-semibold md:flex hidden  gap-x-3 hover:cursor-pointer hover:bg-neutral-200 hover:text-purple-500 bg text-xl py-3 px-4`} > <FaStar size={30}  /> Favourites
          </div>
-       <div onClick={changeColor} className={`rounded-3xl ${color ? 'text-purple-500 bg-neutral-200' :null} items-center m-2 font-semibold flex gap-x-3 hover:cursor-pointer hover:bg-neutral-200 hover:text-purple-500 bg text-xl py-3 px-4`} > <FaStar size={30}  /> Favourites
-         </div>
+         <div onClick={changeColor} className='md:hidden flex ' > <FaStar className={`size-10 cursor-pointer mx-6 hover:text-purple-400 ${color ? 'text-purple-500 bg-neutral-200' :null}  px-2 py-1 rounded-md`}   /></div>
          <div className='absolute bottom-11 m-0  items-center
           justify-center font-bold gap-x-8 text-2xl w-[17.9vw]  overflow-hidden rounded-b-sm hover:bg-neutral-300 px-4 py-2  flex'>
-            <input type="file" onChange={Profile} className='hidden'  id="Input" /> <label htmlFor="Input"> { profilepic?<img className='size-11 left-3 border border-white border-solid  relative rounded-full ' src={`/api/${picture}`} alt="" /> : <CgProfile size={40} /> }</label>{name}<RiArrowDropDownLine size={40} /></div>
+            <input type="file" onChange={Profile} className='hidden'  id="Input" /> <label htmlFor="Input"> { profilepic?<img className='size-11 md:left-3 border border-white border-solid right-3  relative rounded-full ' src={`/api/${picture}`} alt="" /> : <CgProfile size={40} /> }</label><div className='md:flex hidden justify-center items-center'>{name}<RiArrowDropDownLine size={40} /></div></div>
      </div>
      <div className='w-[80%] h-full items-center justify-center'>
         <div className='flex items-center justify-center'>
@@ -160,12 +162,13 @@ const Home = () => {
        <div className='icon-wrap'></div>
        <FaSearch  className='relative top-5 z-20 size-6 left-3' />
        <form onSubmit={HandleSearch}>
- <input value={Search}   onChange={(e)=>{setSearch(e.target.value)}} className='bg-slate-100 w-[69vw] my-3 p-2 relative right-4 px-8 border rounded-3xl' placeholder='Enter Title to Search here...' type='search' /></form>
+ <input value={Search}   onChange={(e)=>{setSearch(e.target.value)}} className='bg-slate-100 md:w-[69vw] w-[68vw] my-3 p-2 relative right-4 px-8 border rounded-xl md:rounded-3xl' placeholder='Enter Title to Search here...' type='search' /></form>
             </div>
        </div>
-       <div className='m-1 border rounded-full w-[9vw] font-bold relative right-3 px-4 py-2 items-center bg-slate-100 flex gap-x-2 text-xl hover:cursor-pointer hover:bg-slate-200'  onClick={sort}><GrSort size={20} /> Sort </div>
+       <div className='m-1 border rounded-full w-[9vw] font-bold relative right-3 px-4 py-2 items-center bg-slate-100 md:flex hidden gap-x-2 text-xl hover:cursor-pointer hover:bg-slate-200'  onClick={sort}><GrSort size={20} /> Sort </div>
+       <div onClick={sort} className='flex md:hidden'><GrSort className='size-10 bg-slate-200 px-2 py-1 rounded-lg' /></div>
        </div>
-       {profile ? <div className='fixed inset-0 flex items-center z-50 justify-center bg-black bg-opacity-50'><div className='bg-white flex flex-col p-6 rounded-lg shadow-lg w-[20vw] h-[40vh]'>
+       {profile ? <div className='fixed inset-0 flex items-center z-50 justify-center bg-black bg-opacity-50'><div className='bg-white flex flex-col p-6 rounded-lg shadow-lg md:w-[20vw] md:h-[40vh] w-[60vw]'>
     <div className='text-4xl font-bold text-red-600 justify-center'>Alert!</div>
     <div className='text-xl justify-center font-semibold mt-10 '>Do you want to add a Profile Picture</div>
        <div className='flex mt-14 gap-x-32'>
@@ -174,17 +177,19 @@ const Home = () => {
        </div></div>:null}
      { loading ? <ImSpinner8 className="h-8 w-8 relative z-20 left-[40vw] top-56 animate-spin text-slate-800" /> :  <Card bgtitle={bgtitle} setCards={setCards} />}
         
-         <div className='absolute right-16  top-[86vh] flex items-center justify-center '>
-       { Loading ||Load ? < ImSpinner3 className="h-6 w-6 relative right-[51vw] z-20 justify-center items-center top-1 animate-spin text-slate-800" />:<FaPencilAlt className='z-10 fixed left-[25.5vw]' onClick={noteCreation} /> } 
+         <div className='relative right-2  top-[7vh] flex items-center justify-center '>
+       { Loading ||Load ? < ImSpinner3 className="h-6 w-6 relative right-[51vw] z-20 justify-center items-center wx-2 top-1 animate-spin text-slate-800" />:<FaPencilAlt className='z-10 relative right-2 ' onClick={noteCreation} /> } 
           
           <textarea type="text" value={ Listening? message + (transcript.length ? (message.length ? " ": "")+ transcript : "") : message} id='textarea'  onChange={(e)=>{
             setmessage(e.target.value);
              e.target.style.height = 'auto';
             e.target.style.height = e.target.scrollHeight + 'px';
             
-           }}  className='w-[50vw] right-10 fixed left-[24.5vw]  resize-none flex overflow-x-auto border-black py-2 border placeholder-zinc-950 mx-1 bg-stone-100 rounded-xl break-words justify-center items-center scrollbar-thin h-11 min-h-11 max-h-[14vh]   scrollbar-thumb-gray-500 scrollbar-track-gray-200 px-8' placeholder='Enter text here...' rows="1" />
-           <button onClick={Handlevoice} className={`${Listening? "bg-green-600" :"bg-red-500"} w-44 items-center justify-center relative right-7 px-2 font-bold py-3 hover:cursor-pointer flex gap-x-2 rounded-lg `}> {Listening ? <> <MdOutlineKeyboardVoice size={20} /> Listening</>:<><MdKeyboardVoice size={20} /> Start Recording</> }</button>
-          <button onClick={l} className=' rounded-2xl text-xl bg-black items-center justify-center flex text-white font-bold gap-x-2 fot-bold w-36 p-3'>Logout <TbLogout size={30} /></button>
+           }}  className='md:w-[50vw] w-[370px] right-10 relative   resize-none flex overflow-x-auto border-black py-2 border placeholder-zinc-950 mx-1 bg-stone-100 rounded-xl break-words justify-center items-center scrollbar-thin h-11 min-h-11 max-h-[14vh]   scrollbar-thumb-gray-500 scrollbar-track-gray-200 px-8' placeholder='Enter text here...' rows="1" />
+           <button onClick={Handlevoice} className={`${Listening? "bg-green-600" :"bg-red-500"} w-10 items-center justify-center md:w-44 md:flex hidden relative right-7 px-2 font-bold py-3 hover:cursor-pointer  gap-x-2 rounded-lg `}> {Listening ? <> <MdOutlineKeyboardVoice size={20} /> Listening</>:<><MdKeyboardVoice size={20} /> Start Recording</> }</button>
+           <button onClick={Handlevoice} className='flex md:hidden'>{Listening ? <> <MdOutlineKeyboardVoice className='bg-green-600 size-10 rounded-md px-2 py-1' size={20} /> </>:<><MdKeyboardVoice className='bg-red-500 size-10 rounded-md px-2 py-1' /> </> }</button>
+          <button onClick={l} className=' rounded-2xl text-xl bg-black items-center justify-center  text-white font-bold hidden  md:flex gap-x-2 fot-bold md:w-36 p-3'>Logout <TbLogout  size={30} /></button>
+          <button onClick={l}><TbLogout className='visible md:hidden mx-3 bg-slate-500 px-2 py-1 items-center rounded-md justify-center size-10 '  /></button>
          </div>
      </div>
      </div>

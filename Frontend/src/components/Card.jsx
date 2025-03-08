@@ -155,10 +155,10 @@ const Card = ({bgtitle,setCards}) => {
        <div className='flex gap-x-2 w-[80vw] flex-wrap gap-y-2 h-[70vh] overflow-y-auto   overflow-x-hidden'> 
      { savedmessages && savedmessages.length >0 ?  
      savedmessages.map((msg,idx)=>(
-     <div key={idx} onDoubleClick={()=>{HandlenewWindow(msg)}} className='w-[260px] h-[50vh] border hover:bg-stone-200 cursor-pointer border-slate-400  rounded-lg bg-neutral-100 relative'>   
+     <div key={idx} onDoubleClick={()=>{HandlenewWindow(msg)}} className='md:w-[260px] h-[50vh] border hover:bg-stone-200 cursor-pointer w-[250px] border-slate-400  rounded-lg bg-neutral-100 relative'>   
     {msg.isAudio ? <FaPlay  className='flex justify-center relative left-52 top-3 size-9' /> :<TbCircleLetterTFilled className='flex  justify-center relative left-52 top-3 size-10'  />}
         <div className='relative bottom-4 left-3 text-gray-500'>{time(msg.createdAt)}</div>
-      <div className='font-bold py-4 px-2'>{title && isStarred===idx  ? ( <div className='flex gap-x-1'> <input value={newtitle} onChange={(e)=>{setnewtitle(e.target.value)}} className='w-[10vw] border border-black rounded-md text-gray-500 px-2 py-1' type="text" /> <div onClick={()=>{HandleChange(newtitle,msg._id)}} className='text-white justify-center items-center rounded-xl px-2 py-1 bg-gray-600'>Save</div></div> )
+      <div className='font-bold py-4 px-2'>{title && isStarred===idx  ? ( <div className='flex gap-x-1'> <input value={newtitle} onChange={(e)=>{setnewtitle(e.target.value)}} className='md:w-[10vw] w-[25vw] border border-black rounded-md text-gray-500 px-2 py-1' type="text" /> <div onClick={()=>{HandleChange(newtitle,msg._id)}} className='text-white justify-center items-center rounded-xl px-2 py-1 bg-gray-600'>Save</div></div> )
      : <div className='flex flex-wrap  px-1 break-all overflow-y-hidden  overflow-x-clip'> {msg.title}</div>}</div>
               <div className='w-56 overflow-hidden'>
         <p className='relative left-5 flex flex-wrap-reverse px-2   overflow-y-hidden overflow-x-auto break-all mx-1 text-wrap h-[29vh] text-slate-500'>{msg.message}</p></div>
