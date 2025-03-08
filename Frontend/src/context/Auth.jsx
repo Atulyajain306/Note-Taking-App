@@ -11,9 +11,10 @@ const [isAuth,setIsAuth] = useState(null);
 const [profilepic,setProfilepic] = useState(null);
 const [singleMessage,setsingleMessage] = useState(null)
 const [favourates,setfavourates] = useState([])
+const [updated, setupdated] = useState(null)
 const [savedmessages,setsavedmessages] = useState([]);
           
- return(<AuthContext.Provider value={{authUser,setauthUser,isAuth,setIsAuth,savedmessages,setsavedmessages,favourates,setfavourates,profilepic,setProfilepic,singleMessage,setsingleMessage}}>
+ return(<AuthContext.Provider value={{authUser,setauthUser,isAuth,setIsAuth,savedmessages,setsavedmessages,favourates,setfavourates,profilepic,setProfilepic,singleMessage,setsingleMessage,updated,setupdated}}>
             {children}
         </AuthContext.Provider>)
 

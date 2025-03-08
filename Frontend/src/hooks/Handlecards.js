@@ -2,7 +2,7 @@ import { useAuthContext } from '../context/Auth';
 import { useEffect,useState } from 'react';
 
 const Handlecards = () => {
-    const {savedmessages,setsavedmessages,favourates, setfavourates}=useAuthContext();
+    const {savedmessages,setsavedmessages,favourates,setfavourates}=useAuthContext();
     const [loading,setloading]=useState();
     useEffect(() => {
       console.log("saved",savedmessages)
@@ -24,10 +24,11 @@ const Handlecards = () => {
        let data=await res.json();
          console.log(data);
          const w = data.map((msg) => ({
-          ...msg, // Retains all properties of msg
+          ...msg, 
           title: msg.title?.length ? msg.title : msg.isAudio ? "Engineering Assignment Audio" : "Engineering Assignment Note",
         })); 
-        setsavedmessages(w);
+        const mess=sortMessages(w)
+        setsavedmessages(mess);
         const idsOnly = savedmessages.map((msg) => ({ _id: msg._id,favourite:msg.favoutite }));
         setfavourates(idsOnly);
 
@@ -44,3 +45,12 @@ const Handlecards = () => {
 }
 
 export default Handlecards
+
+function sortMessages(w){
+  return w.sort((a,b)=>{
+    const dateA=new Date(a.createdAt);
+    const dateB=new Date(b.createdAt);
+    return dateA-dateB 
+  });
+   
+}

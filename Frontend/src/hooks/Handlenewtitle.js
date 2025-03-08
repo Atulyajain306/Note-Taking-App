@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/Auth";
 const Handlenewtitle = () => {
-         const {setsingleMessage,savedmessages,setsavedmessages}=useAuthContext();
+         const {setsingleMessage,savedmessages,setsavedmessages,setupdated}=useAuthContext();
      const cardtitlenew=async (popuptitle,id)=>{
           try{
                const res=await fetch(`/api/newtitle`,{
@@ -22,7 +22,13 @@ const Handlenewtitle = () => {
                   } 
                }
                  setsingleMessage((prev)=>({...prev,title:data.title}));
-const filtermess=savedmessages.map((msg)=>(msg._id === data._id ? {...msg,title:data.title} :msg))
+                 const filtermess = savedmessages.map((msg) => {
+                    if (msg._id === id) {
+                  setupdated(new Date().toISOString());
+                  return { ...msg, title: data.title,updatedAt: new Date().toISOString() };
+                    }
+                    return msg;
+                });
               setsavedmessages(filtermess);
               toast.success("Title Editted Succesfully");     
           }

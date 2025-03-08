@@ -4,15 +4,12 @@ import { RxDownload } from "react-icons/rx";
 
 const SpeechPlayer = ({ message }) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const [audioURL, setAudioURL] = useState(null);
-  const [isPaused, setIsPaused] = useState(false);
 
   const synth = useRef(window.speechSynthesis);
   const utteranceRef = useRef(null);
-  const animationRef = useRef(null);
-  const startTimeRef = useRef(null);
-  const pausedTimeRef = useRef(0);
   const lastCharIndex = useRef(0);
 
   useEffect(() => {
@@ -25,7 +22,7 @@ const SpeechPlayer = ({ message }) => {
     utteranceRef.current = utterance;
     utterance.volume = 1;
 
-    // Assign a voice
+    
     const updateVoices = () => {
       let voices = synth.current.getVoices();
       if (voices.length > 0) {
@@ -38,30 +35,38 @@ const SpeechPlayer = ({ message }) => {
     updateVoices();
     synth.current.onvoiceschanged = updateVoices;
 
-    // When speech ends
+ 
     utterance.onend = () => {
       setIsPlaying(false);
       setIsPaused(false);
-      resetProgress();
+      setProgress(100); 
+      setTimeout(() => setProgress(0), 500);
+      cancelAnimationFrame(animationRef.current);
     };
 
-    // Track progress
+    
     utterance.onboundary = (event) => {
       lastCharIndex.current = event.charIndex;
-      if (utterance.text.length > 0) {
-        setProgress((event.charIndex / utterance.text.length) * 100);
-      }
+      setProgress(((event.charIndex / message.length) * 100));
     };
-
   }, [message]);
 
-  // Reset speech synthesis
-  const resetSpeechSynthesis = () => {
-    synth.current.cancel();
-    synth.current = window.speechSynthesis;
-  };
+  const animateProgress = () => {
+    const update = () => {
+      if (!synth.current.speaking || isPaused) {
+        cancelAnimationFrame(animationRef.current);
+        return;
+      }
 
-  // Toggle Play / Pause
+      const elapsed = Date.now() - startTimeRef.current;
+      const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
+
+      setProgress((prev) => Math.min(Math.max(prev, estimatedProgress), 100));
+
+      animationRef.current = requestAnimationFrame(update);
+    };
+    animationRef.current = requestAnimationFrame(update);
+  };
   const toggleSpeech = () => {
     if (!synth.current) return;
 
@@ -69,54 +74,25 @@ const SpeechPlayer = ({ message }) => {
       synth.current.pause();
       setIsPaused(true);
       setIsPlaying(false);
-      pausedTimeRef.current = Date.now() - startTimeRef.current;
       cancelAnimationFrame(animationRef.current);
     } else if (isPaused) {
       synth.current.resume();
       setIsPaused(false);
       setIsPlaying(true);
-      startTimeRef.current = Date.now() - pausedTimeRef.current;
       animateProgress();
     } else {
-      setProgress(0);
+     
       synth.current.cancel();
-      utteranceRef.current.text = message.slice(lastCharIndex.current); // Resume from last point
-      synth.current.speak(utteranceRef.current);
       setIsPlaying(true);
       setIsPaused(false);
-      startTimeRef.current = Date.now();
+      lastCharIndex.current = 0; 
+      setProgress(0);
+      synth.current.speak(utteranceRef.current);
       animateProgress();
     }
   };
 
-  // Animate Progress Bar
-  const animateProgress = () => {
-    const update = () => {
-      if (!synth.current.speaking || isPaused) {
-        cancelAnimationFrame(animationRef.current);
-        return;
-      }
-      const elapsed = Date.now() - startTimeRef.current;
-      const totalDuration = utteranceRef.current.text.length * 60;
-      const newProgress = Math.min((elapsed / totalDuration) * 100, 100);
-      setProgress(newProgress);
-
-      if (newProgress < 100) {
-        animationRef.current = requestAnimationFrame(update);
-      }
-    };
-    animationRef.current = requestAnimationFrame(update);
-  };
-
-  // Reset progress bar smoothly
-  const resetProgress = () => {
-    setTimeout(() => {
-      setProgress(0);
-      lastCharIndex.current = 0;
-    }, 500);
-  };
-
-  // Download text as a file
+ 
   const downloadAudio = () => {
     const blob = new Blob([message], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -142,4 +118,5 @@ const SpeechPlayer = ({ message }) => {
 };
 
 export default SpeechPlayer;
+
 

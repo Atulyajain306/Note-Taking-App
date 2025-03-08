@@ -1,11 +1,10 @@
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/Auth";
 const Handlenewbody = () => {
-     const {setsingleMessage,savedmessages,setsavedmessages}=useAuthContext();
+     const {setsingleMessage,savedmessages,setsavedmessages,updated,setupdated}=useAuthContext();
     const handlebody=async(id,mess)=>{
          try
          {
-               
             let res=await fetch("/api/newbody",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
@@ -15,9 +14,13 @@ const Handlenewbody = () => {
             if(data.error){
                 throw new Error(data.error)
             }
-               const filtermessage=savedmessages.map((msg)=>(
-                msg._id=== id ? {...msg ,message:data.message } : msg
-               ))
+            const filtermessage = savedmessages.map((msg) => {
+                if (msg._id === id) {
+                    setupdated( new Date().toISOString()); 
+                    return { ...msg, message: data.message,updatedAt: new Date().toISOString() };
+                }
+                return msg;
+            });            
                setsavedmessages(filtermessage);
               setsingleMessage((prev)=>({...prev,message:data.message}))
             toast.success("Message Saved Successfully")

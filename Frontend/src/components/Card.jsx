@@ -31,7 +31,7 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
     const [newtitle,setnewtitle]=useState("");
     const [title, settitle] = useState(false);
     const [enlarge, setenlarge] = useState(false);
-    const {savedmessages,setsavedmessages,singleMessage,setsingleMessage}=useAuthContext();
+    const {savedmessages,setsavedmessages,singleMessage,setsingleMessage,updated,setupdated}=useAuthContext();
     const { handleEdit}=HandleEdit();
     const {handleremove}=HandleDelete(); 
     const {handlebody}=Handlenewbody();
@@ -48,6 +48,7 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
     const [action, setaction] = useState(false);
   
   const HandlenewWindow = (msg) => {
+    setupdated(msg.updatedAt);
     setSelectedCard(msg);
     setsingleMessage(msg);
   };
@@ -177,7 +178,7 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
 <div className="fixed inset-0 flex items-center z-30 justify-center bg-black bg-opacity-50"> <div  className="bg-white p-6 rounded-lg shadow-lg w-[80vw] h-[74vh]" 
              onClick={(e) => e.stopPropagation()} >
              <button  onClick={closePopup} className='fixed left-[87vw] top-[16vh] justify-center '><RxCross2 className='size-8' /></button>
-             <h1 className='text-3xl m-3 font-bold flex gap-x-4 items-center'>Transcript <FaRegStickyNote /> <p className='text-lg font-semibold text-slate-500'>{time(singleMessage.createdAt)}</p> </h1>
+      <h1 className='text-3xl m-3 font-bold flex gap-x-4 items-center'>Transcript <FaRegStickyNote /> <p className='text-lg flex gap-x-1 font-semibold text-slate-500'><div className='text-black font-bold'>CreatedAt:</div>{time(singleMessage.createdAt)}</p> <p className='text-lg flex gap-x-1 relative left-3  font-semibold text-slate-500'><div className='text-black font-bold'>LastUpdated:</div>{time(updated)}</p> </h1>
             <h2 onDoubleClick={()=>{HandlenewChange(singleMessage.title)}} className={`text-2xl font-bold rounded-lg w-[77vw] flex ${editscript ? null : "border border-black"} justify-between  px-2 py-2`}>{ editscript ?  
         (<form onSubmit={(e)=>{Handletitleedit(singleMessage._id),e.preventDefault()}} className='w-full mx-2' ><input value={popuptitle} className='bg-neutral-100 w-full rounded-lg relative h-12 bottom-2 px-2 py-2 border border-black'  onChange={(e)=>{ setpopuptitle(e.target.value)}} /></form>) : singleMessage.title} <FaRegCopy className='cursor-pointer' onClick={()=>{Copy(singleMessage.title)}} /></h2>
         {singleMessage.isAudio ? <SpeechPlayer message={singleMessage.message} /> : null}
