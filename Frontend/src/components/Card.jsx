@@ -22,7 +22,7 @@ import Deletefavourite from '../hooks/Deletefavourite';
 import Handlefile from '../hooks/Handlefile';
 import Handlenewtitle from '../hooks/Handlenewtitle';
 import Handlenewbody from '../hooks/Handlenewbody';
-const Card = ({bgtitle,setbgtitle,Edit}) => {
+const Card = ({bgtitle,setCards}) => {
     const {messages}=Handlecards();
     const {Liked}=HandleFavourate();
     const {Deleted}=Deletefavourite();
@@ -39,20 +39,26 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
     const [openDropdown, setOpenDropdown] = useState(null);
     const [selectedCard, setSelectedCard] = useState(null);
     const [image, setImage] = useState(null);
-    const [cards, setCards] = useState([]);
     const [popuptitle, setpopuptitle] = useState(null)
     const [editscript, seteditscript] = useState(false);
     const [editbody, seteditbody] = useState(false);
     const [editmessage, seteditmessage] = useState(false);
     const [editnewbody, seteditnewbody] = useState(null);
-    const [action, setaction] = useState(false);
   
   const HandlenewWindow = (msg) => {
     setupdated(msg.updatedAt);
     setSelectedCard(msg);
     setsingleMessage(msg);
   };
-
+  const FetchCards=async()=>{
+    const res=await fetch("/api/cards",{
+      method:"GET",
+      headers:{"Content-Type":"application/json"}
+    });
+    const data=await res.json();
+    let rr=sortMessages(data)
+    setCards(rr);
+}  
   const closePopup = () => {
     setSelectedCard(null);
     setenlarge(false);
@@ -68,16 +74,19 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
          settitle(true);
          setisStarred(idx);
          setnewtitle(title);
+         FetchCards();
     }
     const toggleStar = (idx) => {
         const q=[...savedmessages];
         setsavedmessages(q);
-          Liked(idx); 
+          Liked(idx);
+          FetchCards(); 
       };
      const removeStar=(idx)=>{
       const q=[...savedmessages];
         setsavedmessages(q);
-          Deleted(idx); 
+          Deleted(idx);
+          FetchCards(); 
      } 
     const time=(time)=>{
        const w= extractTime(time);
@@ -87,9 +96,11 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
           handleEdit(newtitle,_id);
           settitle(false);
           setnewtitle(""); 
+          FetchCards();
     }
     const Handledelete=(id)=>{
           handleremove(id);
+          FetchCards();
     }
   const HandleFile=(id)=>{
        if(!image){
@@ -99,7 +110,6 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
        formData.append("image",image);
          Fileadd(formData,id);
          setImage(null);
-         FetchCards();
   }
   const File=(e)=>{
     setImage(e.target.files[0]);
@@ -114,12 +124,7 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
      setenlarge(false);
      document.getElementById("img").style.visibility="visible";
   }
-  const FetchCards=async()=>{
-        const res=await fetch("/api/cards");
-        const data=await res.json();
-        setCards(data);
-       
-  }
+  
   const HandlenewChange=(title)=>{
          seteditscript(true); 
          setpopuptitle(title);
@@ -141,18 +146,11 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
      cardtitlenew(popuptitle,id);
      setpopuptitle("");
   }
-  
-
-
-
-  useEffect(() => {
-   FetchCards();
-  }, [])
   useEffect(() => {
     console.log("msg",singleMessage);
+    FetchCards();
   }, [singleMessage])
-  
-  
+   
   return (
        <div className='flex gap-x-2 w-[80vw] flex-wrap gap-y-2 h-[70vh] overflow-y-auto   overflow-x-hidden'> 
      { savedmessages && savedmessages.length >0 ?  
@@ -210,3 +208,10 @@ const Card = ({bgtitle,setbgtitle,Edit}) => {
 };
 
 export default Card
+
+function sortMessages(w){
+  return w.sort((a,b)=>{
+    const dateA=new Date(a.createdAt);
+    const dateB=new Date(b.createdAt);
+    return dateA-dateB 
+  })};

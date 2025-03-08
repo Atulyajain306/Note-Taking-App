@@ -11,7 +11,6 @@ export default defineConfig({
       changeOrigin: true,
       secure: false,
       rewrite: (path) => {
-        console.log("Proxying request:", path); // Debug log
         return path.replace(/^\/api/, '');
       }
     }

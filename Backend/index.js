@@ -72,8 +72,9 @@ app.get("/cards", async(req,res)=>{
         try
          {
              const cards=await Message.find();
-             console.log(cards);
-             res.json(cards);
+             const www=await Audio.find();
+             let qqq=[...cards,...www]
+             res.json(qqq);
          }
          catch(error)
          {

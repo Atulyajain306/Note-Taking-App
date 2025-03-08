@@ -27,9 +27,6 @@ import Handlegetpic from '../hooks/Handlegetpic';
 const Home = () => {
        const [name, setname] = useState([]);
        const [color,setcolor]=useState(false);
-       const [filtermessage, setfiltermessage] = useState({});
-       const [www, setwww] = useState({});
-       const [ww, setww] = useState({});
   const {Listening,transcript,startListening,stopListening,Load,setLoad}=Handlespeechtotext({continuous:true});
        const {savedmessages,setsavedmessages,profilepic}=useAuthContext();
        const Edit=["Create Notes","No Favourites Added","No Related titles Found"];
@@ -45,15 +42,34 @@ const Home = () => {
          const [Search, setSearch] = useState("")
          const [message, setmessage] = useState("");
          const [pic, setpic] = useState(false);
+         const [cards, setCards] = useState([]);
          const [picture, setpicture] = useState(profilepic);
-         const [voice, setvoice] = useState(false);
         useEffect(() => {
           let w= localStorage.getItem("item");
           const q=JSON.parse(w);
           setname(q.username);
-            setpicture(profilepic)
-      }, [profilepic])
+          setpicture(profilepic);
+          FetchCards();
+      }, [profilepic,setsavedmessages])
+
+      const FetchCards=async()=>{
+        const res=await fetch("/api/cards",{
+          method:"GET",
+          headers:{"Content-Type":"application/json"}
+        });
+        const data=await res.json();
+        let rr=sortMessages(data)
+        setCards(rr);
        
+  } 
+  const sortMessages=(w)=>{
+    return w.sort((a,b)=>{
+      const dateA=new Date(a.createdAt);
+      const dateB=new Date(b.createdAt);
+      return dateA-dateB 
+    });
+     
+  }
          const sort=()=>{
          const reversedmsg=[...savedmessages].reverse();
          setsavedmessages(reversedmsg);
@@ -64,58 +80,33 @@ const Home = () => {
         }
         const setColor=()=>{
           setcolor(false);
-          console.log("filter",filtermessage);
-          console.log("saved",savedmessages);
           setbgtitle(Edit[0]);
-         const  ne=[...savedmessages]
-           if(www.length>0){
-              if(filtermessage.length>0){
-                 setsavedmessages(ww)
-              }else{
-                setsavedmessages(filtermessage)
-              }
-           }else{
-           if(filtermessage.length >0 || filtermessage.length===savedmessages.length  ){
-            setsavedmessages(filtermessage)
-           }
-           else{
-            setsavedmessages(ne)
-           }
-           }
+          setsavedmessages(cards);
+            
         }
         const changeColor=()=>{
               setcolor(true);
-             if(www.length>0){
-              setsavedmessages(www);
-              setsavedmessages( (prevMessages)=>(prevMessages.filter(msg => msg.favoutite===true)));
-             }
-             else{
-              setfiltermessage(savedmessages);
-             setsavedmessages( (prevMessages)=>(prevMessages.filter(msg => msg.favoutite===true)));}
+             setsavedmessages((prevMessages)=>(prevMessages.filter(msg => msg.favoutite===true)));
              setbgtitle(Edit[1]);
+             FetchCards();
         }
         const HandleSearch=(e)=>{
                e.preventDefault();
              if(!Search.trim()){
                  setsavedmessages(savedmessages)
              }
-              const title=savedmessages.filter((c)=> c.title && c.title.toLowerCase().includes(Search.toLowerCase()));
+              const title=cards.filter((c)=> c.title && c.title.toLowerCase().includes(Search.toLowerCase()));
               if(title.length===0){
                 toast.error("No Related Titles found");
               }
               setbgtitle(Edit[2]);
-                setww(savedmessages);
-              setwww(savedmessages);
-              setfiltermessage(savedmessages);
              setsavedmessages(title);
              setSearch(""); 
 
         }
-        const noteCreation=async()=>{
-             
+        const noteCreation=async()=>{   
              await Notecreation(message);
-             const r=savedmessages 
-             setfiltermessage(...r,message)
+              FetchCards();
              setmessage("");
              document.getElementById("textarea").style.height="44px";
         }
@@ -146,6 +137,7 @@ const Home = () => {
          setLoad(true);
           Audiomessage(transcript);
             stopListening(); 
+           FetchCards(); 
      }
   return (
     <>
@@ -180,7 +172,7 @@ const Home = () => {
          <div className='text-white bg-red-500 px-6 w-18 font-bold cursor-pointer justify-center py-1 text-lg rounded-xl' onClick={Handleno}>NO</div>
         <div className='text-white bg-green-500 px-6 w-18 font-bold cursor-pointer justify-center py-1 text-lg rounded-xl' onClick={addbutton}>YES</div> </div> 
        </div></div>:null}
-     { loading ? <ImSpinner8 className="h-8 w-8 relative z-20 left-[40vw] top-56 animate-spin text-slate-800" /> :  <Card bgtitle={bgtitle} setbgtitle={setbgtitle} Edit={Edit} />}
+     { loading ? <ImSpinner8 className="h-8 w-8 relative z-20 left-[40vw] top-56 animate-spin text-slate-800" /> :  <Card bgtitle={bgtitle} setCards={setCards} />}
         
          <div className='absolute right-16  top-[86vh] flex items-center justify-center '>
        { Loading ||Load ? < ImSpinner3 className="h-6 w-6 relative right-[51vw] z-20 justify-center items-center top-1 animate-spin text-slate-800" />:<FaPencilAlt className='z-10 fixed left-[25.5vw]' onClick={noteCreation} /> } 
