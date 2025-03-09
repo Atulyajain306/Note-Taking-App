@@ -6,7 +6,7 @@ const HandleLogout = () => {
     const {setauthUser}=useAuthContext();
    const Logout=async({song})=>{
          try{
-              let res=await fetch("https://note-taking-app-hgg2.onrender.com/api/logout",{
+              let res=await fetch("/api/logout",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
               });

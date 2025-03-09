@@ -4,7 +4,7 @@ const HandleAudiomessages = () => {
     const {savedmessages,setsavedmessages}=useAuthContext();
      const Audiomessage=async(transcript)=>{
            try{
-                 const res= await fetch("https://note-taking-app-hgg2.onrender.com/api/audiomessage",{
+                 const res= await fetch("/api/audiomessage",{
                     method:"POST",
                     headers:{"Content-Type":"application/json"},
                     body:JSON.stringify({transcript})

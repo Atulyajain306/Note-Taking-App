@@ -51,7 +51,7 @@ const Card = ({bgtitle,setCards}) => {
     setsingleMessage(msg);
   };
   const FetchCards=async()=>{
-    const res=await fetch("https://note-taking-app-hgg2.onrender.com/api/cards",{
+    const res=await fetch("/api/cards",{
       method:"GET",
       headers:{"Content-Type":"application/json"}
     });
@@ -184,12 +184,12 @@ const Card = ({bgtitle,setCards}) => {
             <MdContentCopy className='relative cursor-pointer size-4 left-[76vw] bottom-[30vh] ' onClick={()=>{Copy(singleMessage.message)}} />
            <div className='flex gap-x-5'> 
              {singleMessage.ImageURL && (<>
-               <img src={`https://note-taking-app-hgg2.onrender.com/api/${singleMessage.ImageURL}`} id='img' className={`w-60 cursor-pointer ${singleMessage.isAudio ? "h-24" : "h-28"} rounded-md`} onClick={Enlarge} />
+               <img src={`/api/${singleMessage.ImageURL}`} id='img' className={`w-60 cursor-pointer ${singleMessage.isAudio ? "h-24" : "h-28"} rounded-md`} onClick={Enlarge} />
              </>)}
    {enlarge ? (<div className='absolute top-24 right-[20vw] z-50 flex bg-opacity-100 m-1'><div className='bg-stone-200 px-6 py-8  rounded-xl shadow-4xl w-[60vw] h-[75vh] '>
     <RxCross2 onClick={Delarge} className='size-8 w-fit relative left-[55vw] bottom-4  z-40 cursor-pointer' />
      <div className=' flex justify-center items-center  w-full h-full'>
-     <img  src={`https://note-taking-app-hgg2.onrender.com/api/${singleMessage.ImageURL}`} className='max-w-full rounded-lg max-h-full object-contain mb-12' onClick={Enlarge}  alt='Enlarged' />
+     <img  src={`/api/${singleMessage.ImageURL}`} className='max-w-full rounded-lg max-h-full object-contain mb-12' onClick={Enlarge}  alt='Enlarged' />
       </div>
       </div>
       </div>) :null}

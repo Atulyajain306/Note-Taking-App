@@ -6,7 +6,7 @@ const Handlefile = () => {
     const Fileadd=async(formData,id)=>{
         try
         {
-            const res=await fetch(`https://note-taking-app-hgg2.onrender.com/api/upload/${id}`,{
+            const res=await fetch(`/api/upload/${id}`,{
                 method:"POST",
                 body:  formData
             });

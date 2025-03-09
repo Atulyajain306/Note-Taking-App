@@ -17,7 +17,7 @@ const Handlecards = () => {
    const card=async()=>{
     try{
         setloading(true)
-      let res=await fetch("https://note-taking-app-hgg2.onrender.com/api/info",{
+      let res=await fetch("/api/info",{
         method:"GET",
         headers:{"Content-Type":"application/json"}
        });
