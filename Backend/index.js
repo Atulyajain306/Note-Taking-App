@@ -29,10 +29,11 @@ app.use(cookieParser());
 app.use("/rew",useroutes)
 app.use("/favourite",favouriteroutes)
 const __dirname=path.resolve();
-app.use(express.static(path.join(__dirname,"Frontend/dist")));
-app.get("*",(req,res)=>{
-     res.sendFile(path.join(__dirname,"Frontend","dist","index.html"));
-})
+const frontendPath = path.join(__dirname, "../Frontend/dist");
+app.use(express.static(frontendPath));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
+  });
 app.post("/auth",Signup)
 app.post("/log",Login)
 app.post("/logout",Logout)
