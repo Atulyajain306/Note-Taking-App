@@ -4,7 +4,7 @@ const HandleProfilepic = () => {
     const {setProfilepic}=useAuthContext();
   const Profilepic=async(formdata,id)=>{
      try{
-          let res=await fetch(`/api/upload/profilepic/${id}`,{
+          let res=await fetch(`https://note-taking-app-hgg2.onrender.com/api/upload/profilepic/${id}`,{
             method:"POST",
             body: formdata
           });

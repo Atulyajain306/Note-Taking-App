@@ -51,7 +51,7 @@ const Card = ({bgtitle,setCards}) => {
     setsingleMessage(msg);
   };
   const FetchCards=async()=>{
-    const res=await fetch("/api/cards",{
+    const res=await fetch("https://note-taking-app-hgg2.onrender.com/api/cards",{
       method:"GET",
       headers:{"Content-Type":"application/json"}
     });

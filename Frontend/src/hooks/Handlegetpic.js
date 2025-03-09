@@ -9,7 +9,7 @@ const Handlegetpic = () => {
        
    const Getpic=async()=>{
          try{
-            let res=await fetch("/api/getpic",{
+            let res=await fetch("https://note-taking-app-hgg2.onrender.com/api/getpic",{
                 method:"GET",
                 headers:{"Content-Type":"application/json"}   
             });
