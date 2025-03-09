@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv"
 import multer from "multer";
 import path from "path";
+import cors from "cors"
 import dbconnection from "../Backend/db/db.js";
 import  Signup from "./controllers/Signup.js";
 import cookieParser from "cookie-parser";
@@ -22,6 +23,7 @@ import User from "./models/User.js";
 import Audio from "./models/Audio.js";
 dotenv.config();
 const app=express()
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads",express.static("uploads"));
