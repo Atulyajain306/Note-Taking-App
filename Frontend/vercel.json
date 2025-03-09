@@ -9,11 +9,11 @@
         }
       }
     ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/dist/$1"
-      }
-    ]
+    "rewrites": [
+        {
+          "source": "/api/(.*)",
+          "destination": "https://note-taking-app-backend-sooty.vercel.app/api/$1"
+        }
+      ]
   }
   
