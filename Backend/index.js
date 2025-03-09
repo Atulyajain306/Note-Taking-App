@@ -33,6 +33,10 @@ app.use("/api/favourite",favouriteroutes)
 const __dirname=path.resolve();
 const frontendPath = path.join(__dirname, "../Frontend/dist");
 app.use(express.static(frontendPath));
+app.get("/api/*", (req, res) => {
+    // Ensure API requests are not served as static files
+    res.json({ message: "API working!" });
+  });
 app.get("*", (req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));
   });
