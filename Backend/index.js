@@ -24,7 +24,11 @@ import Audio from "./models/Audio.js";
 dotenv.config();
 const app=express()
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "https://note-taking-app-frontend-jet.vercel.app", // Allow only frontend to access
+    methods: "GET,POST",
+    credentials: true
+ }));
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads",express.static("uploads"));
 app.use(cookieParser());

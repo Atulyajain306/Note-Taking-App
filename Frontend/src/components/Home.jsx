@@ -53,7 +53,7 @@ const Home = () => {
       }, [profilepic,setsavedmessages])
 
       const FetchCards=async()=>{
-        const res=await fetch("/api/cards",{
+        const res=await fetch("https://note-taking-app-backend-sooty.vercel.app/api/cards",{
           method:"GET",
           headers:{"Content-Type":"application/json"}
         });
@@ -153,7 +153,7 @@ const Home = () => {
          <div onClick={changeColor} className='md:hidden flex ' > <FaStar className={`size-10 cursor-pointer mx-6 hover:text-purple-400 ${color ? 'text-purple-500 bg-neutral-200' :null}  px-2 py-1 rounded-md`}   /></div>
          <div className='absolute bottom-11 m-0  items-center
           justify-center font-bold gap-x-8 text-2xl w-[17.9vw]  overflow-hidden rounded-b-sm hover:bg-neutral-300 px-4 py-2  flex'>
-            <input type="file" onChange={Profile} className='hidden'  id="Input" /> <label htmlFor="Input"> { profilepic?<img className='size-11 md:left-3 border border-white border-solid right-3  relative rounded-full ' src={`/api/${picture}`} alt="" /> : <CgProfile size={40} /> }</label><div className='md:flex hidden justify-center items-center'>{name}<RiArrowDropDownLine size={40} /></div></div>
+            <input type="file" onChange={Profile} className='hidden'  id="Input" /> <label htmlFor="Input"> { profilepic?<img className='size-11 md:left-3 border border-white border-solid right-3  relative rounded-full ' src={`https://note-taking-app-backend-sooty.vercel.app/api/${picture}`} alt="" /> : <CgProfile size={40} /> }</label><div className='md:flex hidden justify-center items-center'>{name}<RiArrowDropDownLine size={40} /></div></div>
      </div>
      <div className='w-[80%] h-full items-center justify-center'>
         <div className='flex items-center justify-center'>
