@@ -12,7 +12,8 @@ const HandleEdit = () => {
               let res= await fetch("https://note-taking-app-backend-sooty.vercel.app/api/edit",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({newtitle,_id})
+                body:JSON.stringify({newtitle,_id}),
+                credentials: "include" 
               })
              let data= await res.json();
              if(data.error){

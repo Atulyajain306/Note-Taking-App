@@ -8,7 +8,8 @@ const Handlenewbody = () => {
             let res=await fetch("https://note-taking-app-backend-sooty.vercel.app/api/newbody",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({id,mess})
+                body:JSON.stringify({id,mess}),
+                credentials: "include" 
             });
             let data= await res.json();
             if(data.error){

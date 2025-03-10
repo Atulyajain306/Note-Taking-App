@@ -8,7 +8,8 @@ const HandleDelete = () => {
              let res= await fetch("https://note-taking-app-backend-sooty.vercel.app/api/delete",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({id})
+                body:JSON.stringify({id}),
+                credentials: "include" 
              });
              let data=await res.json();
             if(data.error){

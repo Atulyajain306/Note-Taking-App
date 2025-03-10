@@ -6,9 +6,10 @@ const Handlefile = () => {
     const Fileadd=async(formData,id)=>{
         try
         {
-            const res=await fetch(`https://note-taking-app-backend-sooty.vercel.app/api/upload/${id}`,{
+       const res=await fetch(`https://note-taking-app-backend-sooty.vercel.app/api/upload/${id}`,{
                 method:"POST",
-                body:  formData
+                body:  formData,
+                credentials: "include" 
             });
             const data=await res.json();
             if(data.error){

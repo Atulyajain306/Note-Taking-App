@@ -12,7 +12,8 @@ const HandleSignup = () => {
               let res= await fetch("https://note-taking-app-backend-sooty.vercel.app/api/auth",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
-                body:JSON.stringify({username,password,confirmpassword,email,gender})
+                body:JSON.stringify({username,password,confirmpassword,email,gender}),
+                credentials: "include" 
               });
            const data= await res.json();
            if(data.error){

@@ -19,7 +19,8 @@ const Handlecards = () => {
         setloading(true)
       let res=await fetch("https://note-taking-app-backend-sooty.vercel.app/api/info",{
         method:"GET",
-        headers:{"Content-Type":"application/json"}
+        headers:{"Content-Type":"application/json"},
+        credentials: "include" 
        });
        let data=await res.json();
          console.log(data);

@@ -14,7 +14,8 @@ const HandleCreation = () => {
            const res=await fetch("https://note-taking-app-backend-sooty.vercel.app/api/rew/note",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({message}) 
+            body:JSON.stringify({message}),
+            credentials: "include"  
            }); 
           const data=await res.json();
           

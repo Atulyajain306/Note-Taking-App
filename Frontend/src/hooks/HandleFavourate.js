@@ -8,7 +8,8 @@ const HandleFavourate = () => {
          let res=await fetch("https://note-taking-app-backend-sooty.vercel.app/api/favourite/true",{
              method:"POST",
              headers:{"Content-Type":"application/json"},
-             body:JSON.stringify({_id})
+             body:JSON.stringify({_id}),
+             credentials: "include" 
          });
          const data=await res.json();
          if(data.error){

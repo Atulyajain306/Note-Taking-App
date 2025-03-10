@@ -6,7 +6,8 @@ const HandleProfilepic = () => {
      try{
           let res=await fetch(`https://note-taking-app-backend-sooty.vercel.app/api/upload/profilepic/${id}`,{
             method:"POST",
-            body: formdata
+            body: formdata,
+            credentials: "include" 
           });
           let data=await res.json();
              console.log(data)

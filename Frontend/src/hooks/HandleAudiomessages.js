@@ -7,7 +7,8 @@ const HandleAudiomessages = () => {
                  const res= await fetch("https://note-taking-app-backend-sooty.vercel.app/api/audiomessage",{
                     method:"POST",
                     headers:{"Content-Type":"application/json"},
-                    body:JSON.stringify({transcript})
+                    body:JSON.stringify({transcript}),
+                    credentials: "include" 
                  });
                 let data=await res.json();  
                if(data.error){
