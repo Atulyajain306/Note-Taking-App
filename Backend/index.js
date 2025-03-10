@@ -27,6 +27,7 @@ app.use(express.json());
 app.use(cors({
     origin: "https://note-taking-app-frontend-jet.vercel.app", // Allow only frontend to access
     methods: "GET,POST",
+    allowedHeaders: "Content-Type, Authorization",
     credentials: true
  }));
  app.use((req, res, next) => {
