@@ -12,7 +12,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://note-taking-app-backend-sooty.vercel.app/api/$1"
+      "destination": "https://note-taking-app-eight-sigma.vercel.app/api/$1"
     }
   ]
 }
