@@ -9,7 +9,7 @@ const HandleEdit = () => {
               if( !newtitle || newtitle.trim()==="" || newtitle === undefined){
                 throw new Error("Title is either undefined or empty string")
               }  
-              let res= await fetch("https://note-taking-app-backend-sooty.vercel.app/api/edit",{
+              let res= await fetch("/api/edit",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({newtitle,_id}),

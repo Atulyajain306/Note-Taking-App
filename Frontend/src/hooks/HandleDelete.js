@@ -5,7 +5,7 @@ const HandleDelete = () => {
    const handleremove=async(id)=>{
         try{
                console.log("id",id);
-             let res= await fetch("https://note-taking-app-backend-sooty.vercel.app/api/delete",{
+             let res= await fetch("/api/delete",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({id}),
