@@ -1,4 +1,3 @@
-import React from 'react'
 import "../App.css"
 import { MdOutlineSpeakerNotes } from "react-icons/md";
 import { IoHomeSharp } from "react-icons/io5";
@@ -13,17 +12,17 @@ import { MdKeyboardVoice } from "react-icons/md";
 import { FaPencilAlt } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { FaSearch } from "react-icons/fa";
-import { useState,useEffect } from 'react';
+import { useState,useEffect, useCallback } from 'react';
 import HandleLogout from '../hooks/HandleLogout';
 import Handlespeechtotext from '../hooks/Handlespeechtotext';
 import HandleProfilepic from '../hooks/HandleProfilepic';
 import Card from './Card';
 import HandleCreation from '../hooks/HandleCreation';
+import Handlegetpic from "../hooks/Handlegetpic"
 import HandleAudiomessages from '../hooks/HandleAudiomessages';
 import { useAuthContext } from '../context/Auth';
 import Handlecards from '../hooks/Handlecards';
 import toast from 'react-hot-toast';
-import Handlegetpic from '../hooks/Handlegetpic';
 const Home = () => {
        const [name, setname] = useState([]);
        const [color,setcolor]=useState(false);
@@ -34,34 +33,36 @@ const Home = () => {
         const {loading}=Handlecards();
         const {Logout}=HandleLogout();
         const {Notecreation,Loading}=HandleCreation();
-        const {Getpic}=Handlegetpic();
         const {Audiomessage}=HandleAudiomessages();
         const {Profilepic}=HandleProfilepic();
-         const [song, setsong] = useState(null);
+        const {Getpic}=Handlegetpic();
          const [profile, setprofile] = useState(null)
          const [Search, setSearch] = useState("")
          const [message, setmessage] = useState("");
-         const [pic, setpic] = useState(false);
          const [cards, setCards] = useState([]);
          const [picture, setpicture] = useState(profilepic);
-        useEffect(() => {
-          let w= localStorage.getItem("item");
-          const q=JSON.parse(w);
-          setname(q.username);
-          setpicture(profilepic);
-          FetchCards();
-      }, [profilepic,setsavedmessages])
-
-      const FetchCards=async()=>{
-        const res=await fetch("/api/cards",{
-          method:"GET",
-          headers:{"Content-Type":"application/json"}
-        });
-        const data=await res.json();
-        let rr=sortMessages(data)
-        setCards(rr);
+         
+         const FetchCards=useCallback(async()=>{
+          const res=await fetch("/api/cards",{
+            method:"GET",
+            headers:{"Content-Type":"application/json"}
+          });
+          const data=await res.json();
+          let rr=sortMessages(data)
+          setCards(rr);
+         
+    })
+    useEffect(() => {
+      let w= localStorage.getItem("item");
+      const q=JSON.parse(w);
+      setname(q.username);
+      Getpic();
+      setpicture(profilepic);
+      FetchCards();
+  }, [profilepic,setsavedmessages,FetchCards,Getpic])
        
-  } 
+
+      
   const sortMessages=(w)=>{
     return w.sort((a,b)=>{
       const dateA=new Date(a.createdAt);
@@ -76,7 +77,7 @@ const Home = () => {
           
          }
         const l=async()=>{
-          await Logout({song});
+          await Logout();
         }
         const setColor=()=>{
           setcolor(false);
@@ -112,7 +113,7 @@ const Home = () => {
         }
        const Profile=(e)=>{
           setprofile(e.target.files[0]);
-           setpic(true);
+          
        } 
       const addbutton=()=>{
         const user=localStorage.getItem("item");
@@ -122,12 +123,12 @@ const Home = () => {
         formdata.append("Profile",profile);
         Profilepic(formdata,id);
            setprofile(null);
-          setpic(false); 
+        
         
       } 
      const Handleno=()=>{
          setprofile(null);
-         setpic(false); 
+        
      }
      const Handlevoice=()=>{
           Listening ? voiceInput() : startListening()

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types"; 
 import { FaCirclePlay, FaCirclePause } from "react-icons/fa6";
 import { RxDownload } from "react-icons/rx";
 
@@ -11,6 +12,9 @@ const SpeechPlayer = ({ message }) => {
   const synth = useRef(window.speechSynthesis);
   const utteranceRef = useRef(null);
   const lastCharIndex = useRef(0);
+  const animationRef = useRef(null);
+  const startTimeRef = useRef(null); 
+  const estimatedDurationRef = useRef(null); 
 
   useEffect(() => {
     if (!synth.current) {
@@ -22,11 +26,10 @@ const SpeechPlayer = ({ message }) => {
     utteranceRef.current = utterance;
     utterance.volume = 1;
 
-    
     const updateVoices = () => {
       let voices = synth.current.getVoices();
       if (voices.length > 0) {
-        utterance.voice = voices.find(voice => voice.lang.includes("en")) || voices[0];
+        utterance.voice = voices.find((voice) => voice.lang.includes("en")) || voices[0];
       } else {
         setTimeout(updateVoices, 100);
       }
@@ -35,19 +38,17 @@ const SpeechPlayer = ({ message }) => {
     updateVoices();
     synth.current.onvoiceschanged = updateVoices;
 
- 
     utterance.onend = () => {
       setIsPlaying(false);
       setIsPaused(false);
-      setProgress(100); 
+      setProgress(100);
       setTimeout(() => setProgress(0), 500);
-      cancelAnimationFrame(animationRef.current);
+      cancelAnimationFrame(animationRef.current); 
     };
 
-    
     utterance.onboundary = (event) => {
       lastCharIndex.current = event.charIndex;
-      setProgress(((event.charIndex / message.length) * 100));
+      setProgress(((event.charIndex / message.length) * 100)); 
     };
   }, [message]);
 
@@ -67,6 +68,7 @@ const SpeechPlayer = ({ message }) => {
     };
     animationRef.current = requestAnimationFrame(update);
   };
+
   const toggleSpeech = () => {
     if (!synth.current) return;
 
@@ -81,18 +83,16 @@ const SpeechPlayer = ({ message }) => {
       setIsPlaying(true);
       animateProgress();
     } else {
-     
       synth.current.cancel();
       setIsPlaying(true);
       setIsPaused(false);
-      lastCharIndex.current = 0; 
+      lastCharIndex.current = 0;
       setProgress(0);
       synth.current.speak(utteranceRef.current);
       animateProgress();
     }
   };
 
- 
   const downloadAudio = () => {
     const blob = new Blob([message], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -110,13 +110,21 @@ const SpeechPlayer = ({ message }) => {
         <div className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-200 ease-linear" style={{ width: `${progress}%` }}></div>
         <div className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-200 ease-linear" style={{ left: `${progress}%` }}></div>
       </div>
-      <a href={audioURL} download="speech.txt" className="px-2 text-black font-bold justify-center items-center hover:bg-slate-300 py-2 flex ml-5 text-sm cursor-pointer rounded-md" onClick={downloadAudio}>
+      <a
+        href={audioURL}
+        download="speech.txt"
+        className="px-2 text-black font-bold justify-center items-center hover:bg-slate-300 py-2 flex ml-5 text-sm cursor-pointer rounded-md"
+        onClick={downloadAudio}
+      >
         <RxDownload className="size-6" /> Download
       </a>
     </div>
   );
 };
 
+
+SpeechPlayer.propTypes = {
+  message: PropTypes.string.isRequired,
+};
+
 export default SpeechPlayer;
-
-

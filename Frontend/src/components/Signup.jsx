@@ -1,4 +1,3 @@
-import React from 'react'
 import { useState } from 'react'
 import HandleSignup from '../hooks/HandleSignup'
 import {Link} from "react-router-dom"

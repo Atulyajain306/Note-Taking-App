@@ -1,10 +1,9 @@
-import React from 'react'
 import { useAuthContext } from '../context/Auth'
 import toast from 'react-hot-toast';
 
 const HandleLogout = () => {
     const {setauthUser}=useAuthContext();
-   const Logout=async({song})=>{
+   const Logout=async()=>{
          try{
               let res=await fetch("/api/logout",{
                 method:"POST",

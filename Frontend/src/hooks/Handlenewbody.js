@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/Auth";
 const Handlenewbody = () => {
-     const {setsingleMessage,savedmessages,setsavedmessages,updated,setupdated}=useAuthContext();
+     const {setsingleMessage,savedmessages,setsavedmessages,setupdated}=useAuthContext();
     const handlebody=async(id,mess)=>{
          try
          {

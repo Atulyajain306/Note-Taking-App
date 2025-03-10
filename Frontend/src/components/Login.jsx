@@ -1,4 +1,3 @@
-import React from 'react'
 import {Link} from "react-router-dom"
 import { useState } from 'react'
 import HandleLogin from '../hooks/HandleLogin'
@@ -15,8 +14,8 @@ const Login = () => {
       await Login(inputs);
      }
   return (
-    <div className=' min-h-screen bg-white' >
-         <div className='text-5xl font-bold  text-center py-5 '>Note Taking App</div>
+    <div className="min-h-screen bg-white" >
+         <div className="text-5xl font-bold  text-center py-5">Note Taking App</div>
       <div className="flex relative top-28 items-center justify-center">
       <div className="w-full max-w-md p-8 space-y-6 border  bg-slate-300 shadow-md rounded-2xl">
         <h2 className="text-2xl font-bold text-center text-gray-900">Login to Your Account</h2>
@@ -48,7 +47,7 @@ const Login = () => {
           </button>
         </form>
         <p className="text-center text-sm text-gray-600">
-          Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
+          {`Don't have an account?`} <Link to="/signup" className="text-blue-500 hover:underline">Sign up</Link>
         </p>
       </div>
     </div>

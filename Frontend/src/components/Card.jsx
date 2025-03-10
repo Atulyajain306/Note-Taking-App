@@ -1,5 +1,5 @@
-import React from 'react'
 import toast from 'react-hot-toast';
+import PropTypes from "prop-types";
 import { MdContentCopy } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
 import { FaStar } from "react-icons/fa";
@@ -8,13 +8,12 @@ import SpeechPlayer from './SpeechPlayer';
 import { TbCircleLetterTFilled } from "react-icons/tb";
 import { RxCross2 } from "react-icons/rx";
 import { CiStar } from "react-icons/ci";
-import { useState,useEffect } from 'react';
+import { useState,useEffect, useCallback } from 'react';
 import { FaRegCopy } from "react-icons/fa";
 import { GoPlus } from "react-icons/go";
 import { FaRegStickyNote } from "react-icons/fa";
 import { useAuthContext } from '../context/Auth';
 import { extractTime } from '../../../Backend/utils/extractTime';
-import Handlecards from '../hooks/Handlecards';
 import HandleDelete from '../hooks/HandleDelete';
 import HandleEdit from '../hooks/HandleEdit';
 import HandleFavourate from '../hooks/HandleFavourate';
@@ -23,7 +22,6 @@ import Handlefile from '../hooks/Handlefile';
 import Handlenewtitle from '../hooks/Handlenewtitle';
 import Handlenewbody from '../hooks/Handlenewbody';
 const Card = ({bgtitle,setCards}) => {
-    const {messages}=Handlecards();
     const {Liked}=HandleFavourate();
     const {Deleted}=Deletefavourite();
     const {Fileadd}=Handlefile();
@@ -50,7 +48,7 @@ const Card = ({bgtitle,setCards}) => {
     setSelectedCard(msg);
     setsingleMessage(msg);
   };
-  const FetchCards=async()=>{
+  const FetchCards=useCallback(async()=>{
     const res=await fetch("/api/cards",{
       method:"GET",
       headers:{"Content-Type":"application/json"}
@@ -58,7 +56,7 @@ const Card = ({bgtitle,setCards}) => {
     const data=await res.json();
     let rr=sortMessages(data)
     setCards(rr);
-}  
+})  
   const closePopup = () => {
     setSelectedCard(null);
     setenlarge(false);
@@ -147,9 +145,8 @@ const Card = ({bgtitle,setCards}) => {
      setpopuptitle("");
   }
   useEffect(() => {
-    console.log("msg",singleMessage);
     FetchCards();
-  }, [singleMessage])
+  }, [singleMessage,FetchCards])
    
   return (
        <div className='flex gap-x-2 w-[80vw] flex-wrap gap-y-2 h-[70vh] overflow-y-auto   overflow-x-hidden'> 
@@ -205,6 +202,11 @@ const Card = ({bgtitle,setCards}) => {
          </div> ) : null }   
     </div>   
   );
+};
+
+Card.propTypes = {
+  bgtitle: PropTypes.string.isRequired, 
+  setCards: PropTypes.func.isRequired, 
 };
 
 export default Card

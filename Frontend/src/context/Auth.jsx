@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { createContext,useState } from 'react'
+import  { useContext,createContext,useState  } from 'react'
+import PropTypes from "prop-types";
 export const AuthContext=createContext();
 export const useAuthContext=()=>{
        return (useContext(AuthContext))
@@ -19,3 +19,7 @@ const [savedmessages,setsavedmessages] = useState([]);
         </AuthContext.Provider>)
 
 }
+
+AuthContextProvider.propTypes = {
+       children: PropTypes.node.isRequired,
+     };

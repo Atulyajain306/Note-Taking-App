@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { useAuthContext } from "../context/Auth";
 import { useState } from "react";
 const HandleCreation = () => {
-    const {savedmessages,setsavedmessages,setauthUser}=useAuthContext();
+    const {savedmessages,setsavedmessages}=useAuthContext();
     const [Loading,setLoading]=useState(false);
 
   const Notecreation=async(message)=>{

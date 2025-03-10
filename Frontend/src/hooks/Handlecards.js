@@ -5,8 +5,6 @@ const Handlecards = () => {
     const {savedmessages,setsavedmessages,favourates,setfavourates}=useAuthContext();
     const [loading,setloading]=useState();
     useEffect(() => {
-      console.log("saved",savedmessages)
-      console.log("favourite:",favourates);
     }, [savedmessages,favourates])
    useEffect(() => {
        card();
