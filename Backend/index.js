@@ -25,8 +25,8 @@ dotenv.config();
 const app=express()
 app.use(cors({
     origin: "https://note-taking-app-frontend-jet.vercel.app",  
-    methods: "GET,POST ,PUT, DELETE, OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
+    methods: ["GET","POST" ,"PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
  }));
  app.options("*", cors());
