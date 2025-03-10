@@ -24,16 +24,22 @@ import Audio from "./models/Audio.js";
 dotenv.config();
 const app=express()
 app.use(cors({
-    origin: "https://note-taking-app-frontend-jet.vercel.app",  
+    origin: ["https://note-taking-app-frontend-jet.vercel.app"],  
     methods: ["GET","POST" ,"PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
  }));
- app.options("*", cors());
  app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads",express.static("uploads"));
 app.use(cookieParser());
+app.options("*", (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "https://note-taking-app-frontend-jet.vercel.app");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.sendStatus(204);
+});
 app.use("/api/rew",useroutes)
 app.use("/api/favourite",favouriteroutes)
 app.post("/api/auth",Signup)
