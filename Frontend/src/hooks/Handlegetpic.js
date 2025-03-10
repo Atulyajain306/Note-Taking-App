@@ -5,7 +5,7 @@ const Handlegetpic = () => {
        
    const Getpic=useCallback(async()=>{
     try{
-       let res=await fetch("/api/getpic",{
+       let res=await fetch("https://note-taking-app-eight-sigma.vercel.app/api/getpic",{
            method:"GET",
            headers:{"Content-Type":"application/json"},
            credentials: "include"    
