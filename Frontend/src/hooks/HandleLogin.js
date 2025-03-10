@@ -9,7 +9,8 @@ const HandleLogin = () => {
               method:"POST",
               headers:{"Content-Type":"application/json"},
               body:JSON.stringify({username,password}),
-              credentials: "include" 
+              credentials: "include",
+              mode: "cors", 
            });
            const data=await res.json();
            if(data.error){

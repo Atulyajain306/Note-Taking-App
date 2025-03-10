@@ -22,13 +22,20 @@ import Getpic from "./controllers/Getpic.js";
 import User from "./models/User.js";
 import Audio from "./models/Audio.js";
 dotenv.config();
+const app=express()
 app.use(cors({
     origin: ["https://note-taking-app-94lz.vercel.app"],
     methods: ["GET","POST","PUT","DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
 }))
-const app=express()
+app.options("*", (req, res) => {
+    res.header("Access-Control-Allow-Origin", "https://note-taking-app-94lz.vercel.app");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    return res.sendStatus(200);
+  });
  app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads",express.static("uploads"));
