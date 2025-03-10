@@ -56,7 +56,7 @@ const Card = ({bgtitle,setCards}) => {
     const data=await res.json();
     let rr=sortMessages(data)
     setCards(rr);
-})  
+},[setCards]) 
   const closePopup = () => {
     setSelectedCard(null);
     setenlarge(false);

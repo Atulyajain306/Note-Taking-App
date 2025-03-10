@@ -46,7 +46,7 @@ useEffect(() => {
         recognition.stop();
      }
 
-}, [])
+}, [options.continuous,options.interimResults,options.lang])
 
 const startListening=()=>{
     if(Recognitionref.current && !Listening){

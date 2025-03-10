@@ -51,7 +51,7 @@ const Home = () => {
           let rr=sortMessages(data)
           setCards(rr);
          
-    })
+    },[])
     useEffect(() => {
       let w= localStorage.getItem("item");
       const q=JSON.parse(w);

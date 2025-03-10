@@ -42,14 +42,22 @@ const SpeechPlayer = ({ message }) => {
       setIsPlaying(false);
       setIsPaused(false);
       setProgress(100);
-      setTimeout(() => setProgress(0), 500);
+      setTimeout(() => setProgress(0), 300);
       cancelAnimationFrame(animationRef.current); 
     };
 
     utterance.onboundary = (event) => {
+      cancelAnimationFrame(animationRef.current);
       lastCharIndex.current = event.charIndex;
       setProgress(((event.charIndex / message.length) * 100)); 
     };
+    utterance.onstart = () => {
+      startTimeRef.current = Date.now();
+      estimatedDurationRef.current = message.length * 50; 
+      cancelAnimationFrame(animationRef.current);// Rough estimate (50ms per character)
+      setProgress(0); // Fix: Reset progress when speech starts
+    };
+
   }, [message]);
 
   const animateProgress = () => {
@@ -84,10 +92,10 @@ const SpeechPlayer = ({ message }) => {
       animateProgress();
     } else {
       synth.current.cancel();
+      setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
       lastCharIndex.current = 0;
-      setProgress(0);
       synth.current.speak(utteranceRef.current);
       animateProgress();
     }

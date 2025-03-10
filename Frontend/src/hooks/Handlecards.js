@@ -1,18 +1,12 @@
+import { useCallback } from 'react';
 import { useAuthContext } from '../context/Auth';
 import { useEffect,useState } from 'react';
 
 const Handlecards = () => {
-    const {savedmessages,setsavedmessages,favourates,setfavourates}=useAuthContext();
+    const {savedmessages,setsavedmessages,setfavourates}=useAuthContext();
     const [loading,setloading]=useState();
-    useEffect(() => {
-    }, [savedmessages,favourates])
-   useEffect(() => {
-       card();
-   }, [])
-  
-   
 
-   const card=async()=>{
+   const card=useCallback(async()=>{
     try{
         setloading(true)
       let res=await fetch("/api/info",{
@@ -28,17 +22,25 @@ const Handlecards = () => {
         })); 
         const mess=sortMessages(w)
         setsavedmessages(mess);
-        const idsOnly = savedmessages.map((msg) => ({ _id: msg._id,favourite:msg.favoutite }));
-        setfavourates(idsOnly);
 
     }catch(error){
       console.log(error)
     }finally{
        setloading(false)
     }
-   
        
- }
+ },[setsavedmessages]) 
+
+ useEffect(() => {
+    if(savedmessages.length >0){
+      const idsOnly = savedmessages.map((msg) => ({ _id: msg._id,favourite:msg.favoutite }));
+      setfavourates(idsOnly);
+    }
+ }, [savedmessages,setfavourates])
+ 
+ useEffect(() => {
+  card();
+}, [card])
 
    return {loading}
 }
