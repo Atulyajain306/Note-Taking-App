@@ -23,6 +23,7 @@ import User from "./models/User.js";
 import Audio from "./models/Audio.js";
 dotenv.config();
 const app=express()
+const __dirname=path.resolve();
 const frontendPath = path.join(__dirname, "../Frontend/dist");
 app.use(express.static(frontendPath));
 app.get("*", (req, res) => {
