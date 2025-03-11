@@ -59,8 +59,8 @@ const storage=multer.diskStorage({
 const upload=multer({storage:storage});
 app.post("/upload/:id",upload.single("image"),async function(req,res){
          const {id}=req.params;
-         const user=await Message.findByIdAndUpdate(id,{ImageURL:`/${req.file.filename}`},{new:true});
-         const u=await Audio.findByIdAndUpdate(id,{ImageURL:`/${req.file.filename}`},{new:true});
+         const user=await Message.findByIdAndUpdate(id,{ImageURL:`/uploads/${req.file.filename}`},{new:true});
+         const u=await Audio.findByIdAndUpdate(id,{ImageURL:`/uploads/${req.file.filename}`},{new:true});
           console.log(user); 
           if(!user){
             return res.status(200).json(u.ImageURL);
@@ -72,7 +72,7 @@ app.post("/upload/:id",upload.single("image"),async function(req,res){
 
 app.post("/upload/profilepic/:id",upload.single("Profile"),async function(req,res){
     const {id}=req.params;
-    const user=await User.findByIdAndUpdate(id,{Profilepic:`/${req.file.filename}`},{new:true});
+    const user=await User.findByIdAndUpdate(id,{Profilepic:`/uploads/${req.file.filename}`},{new:true});
     console.log(user);
     return res.status(200).json({Profilepic:user.Profilepic});
 });    
