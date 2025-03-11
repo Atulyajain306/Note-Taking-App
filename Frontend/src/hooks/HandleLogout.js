@@ -5,7 +5,7 @@ const HandleLogout = () => {
     const {setauthUser}=useAuthContext();
    const Logout=async()=>{
          try{
-              let res=await fetch("https://note-taking-app-eight-sigma.vercel.app/api/logout",{
+              let res=await fetch("/api/logout",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 credentials: "include" 

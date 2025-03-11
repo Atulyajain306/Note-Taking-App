@@ -5,7 +5,7 @@ const Deletefavourite = () => {
        const {favourates,setfavourates,savedmessages,setsavedmessages}=useAuthContext();
     const Deleted=async(_id)=>{
           try{
-              let res= await fetch("https://note-taking-app-eight-sigma.vercel.app/api/favourite/false",{
+              let res= await fetch("/api/favourite/false",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({_id}),

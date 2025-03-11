@@ -5,12 +5,11 @@ const HandleLogin = () => {
   const Login=async({username,password})=>{
       
       try{
-           const res= await fetch("https://note-taking-app-eight-sigma.vercel.app/api/log",{
+           const res= await fetch("/api/log",{
               method:"POST",
               headers:{"Content-Type":"application/json"},
               body:JSON.stringify({username,password}),
-              credentials: "include",
-              mode: "cors", 
+              credentials: "include" 
            });
            const data=await res.json();
            if(data.error){

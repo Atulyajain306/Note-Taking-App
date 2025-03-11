@@ -5,7 +5,7 @@ const Handlenewbody = () => {
     const handlebody=async(id,mess)=>{
          try
          {
-            let res=await fetch("https://note-taking-app-eight-sigma.vercel.app/api/newbody",{
+            let res=await fetch("/api/newbody",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({id,mess}),

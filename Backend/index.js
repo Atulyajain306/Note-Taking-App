@@ -23,39 +23,27 @@ import User from "./models/User.js";
 import Audio from "./models/Audio.js";
 dotenv.config();
 const app=express()
-app.use(cors({
-    origin: "https://note-taking-app-94lz.vercel.app",
-    methods: ["GET","POST","PUT","DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
-}))
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://note-taking-app-94lz.vercel.app");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    next();
-});
-
-app.options("*", (req, res) => {
-    res.status(200).send();
+const frontendPath = path.join(__dirname, "../Frontend/dist");
+app.use(express.static(frontendPath));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
  app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads",express.static("uploads"));
 app.use(cookieParser());
-app.use("/api/rew",useroutes)
-app.use("/api/favourite",favouriteroutes)
-app.post("/api/auth",Signup)
-app.post("/api/log",Login)
-app.post("/api/logout",Logout)
-app.get("/api/getpic",protectroute,Getpic)
-app.get("/api/info",protectroute,Getmessages)
-app.post("/api/audiomessage",protectroute,GetAudioMessage)
-app.post("/api/newbody",protectroute,Getbody)
-app.post("/api/newtitle",protectroute,Edittitle)
-app.post("/api/delete",protectroute,Deletemessage)
-app.post("/api/edit",protectroute,Editmessages)
+app.use("/rew",useroutes)
+app.use("/favourite",favouriteroutes)
+app.post("/auth",Signup)
+app.post("/log",Login)
+app.post("/logout",Logout)
+app.get("/getpic",protectroute,Getpic)
+app.get("/info",protectroute,Getmessages)
+app.post("/audiomessage",protectroute,GetAudioMessage)
+app.post("/newbody",protectroute,Getbody)
+app.post("/newtitle",protectroute,Edittitle)
+app.post("/delete",protectroute,Deletemessage)
+app.post("/edit",protectroute,Editmessages)
 const PORT=process.env.PORT;
 const storage=multer.diskStorage({
     destination:(req,file,cd)=>{
@@ -66,7 +54,7 @@ const storage=multer.diskStorage({
     }
 });
 const upload=multer({storage:storage});
-app.post("/api/upload/:id",upload.single("image"),async function(req,res){
+app.post("/upload/:id",upload.single("image"),async function(req,res){
          const {id}=req.params;
          const user=await Message.findByIdAndUpdate(id,{ImageURL:`/uploads/${req.file.filename}`},{new:true});
          const u=await Audio.findByIdAndUpdate(id,{ImageURL:`/uploads/${req.file.filename}`},{new:true});
@@ -79,14 +67,14 @@ app.post("/api/upload/:id",upload.single("image"),async function(req,res){
         }
     });
 
-app.post("/api/upload/profilepic/:id",upload.single("Profile"),async function(req,res){
+app.post("/upload/profilepic/:id",upload.single("Profile"),async function(req,res){
     const {id}=req.params;
     const user=await User.findByIdAndUpdate(id,{Profilepic:`/uploads/${req.file.filename}`},{new:true});
     console.log(user);
     return res.status(200).json({Profilepic:user.Profilepic});
 });    
 
-app.get("/api/cards", async(req,res)=>{
+app.get("/cards", async(req,res)=>{
         try
          {
              const cards=await Message.find();

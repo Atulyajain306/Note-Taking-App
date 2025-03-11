@@ -9,7 +9,7 @@ const Handlecards = () => {
    const card=useCallback(async()=>{
     try{
         setloading(true)
-      let res=await fetch("https://note-taking-app-eight-sigma.vercel.app/api/info",{
+      let res=await fetch("/api/info",{
         method:"GET",
         headers:{"Content-Type":"application/json"},
         credentials: "include" 
