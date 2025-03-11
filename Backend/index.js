@@ -29,6 +29,12 @@ app.use(express.static(frontendPath));
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
+app.use(cors({
+    origin: ["https://note-taking-app-8825.onrender.com"],  // Replace with your frontend domain
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+}));
  app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads",express.static("uploads"));
