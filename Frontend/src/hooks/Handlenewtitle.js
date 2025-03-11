@@ -4,7 +4,7 @@ const Handlenewtitle = () => {
          const {setsingleMessage,savedmessages,setsavedmessages,setupdated}=useAuthContext();
      const cardtitlenew=async (popuptitle,id)=>{
           try{
-               const res=await fetch(`/api/newtitle`,{
+               const res=await fetch(`https://note-taking-app-8825.onrender.com/newtitle`,{
                     method:'POST',
                     headers:{"Content-Type":"application/json"},
                     body:JSON.stringify({popuptitle,id}),

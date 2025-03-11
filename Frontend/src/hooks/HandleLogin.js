@@ -5,7 +5,7 @@ const HandleLogin = () => {
   const Login=async({username,password})=>{
       
       try{
-           const res= await fetch("/api/log",{
+           const res= await fetch("https://note-taking-app-8825.onrender.com/log",{
               method:"POST",
               headers:{"Content-Type":"application/json"},
               body:JSON.stringify({username,password}),

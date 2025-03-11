@@ -5,7 +5,7 @@ const HandleFavourate = () => {
     const {favourates,setfavourates,savedmessages,setsavedmessages}=useAuthContext();
    const Liked=async(_id)=>{
       try{
-         let res=await fetch("/api/favourite/true",{
+         let res=await fetch("https://note-taking-app-8825.onrender.com/favourite/true",{
              method:"POST",
              headers:{"Content-Type":"application/json"},
              body:JSON.stringify({_id}),

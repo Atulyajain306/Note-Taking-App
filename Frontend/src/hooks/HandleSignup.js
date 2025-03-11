@@ -9,7 +9,7 @@ const HandleSignup = () => {
             return 
          }
           try{
-              let res= await fetch("/api/auth",{
+              let res= await fetch("https://note-taking-app-8825.onrender.com/auth",{
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
                 body:JSON.stringify({username,password,confirmpassword,email,gender}),

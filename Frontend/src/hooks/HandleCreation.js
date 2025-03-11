@@ -11,7 +11,7 @@ const HandleCreation = () => {
               throw new Error("Message is empty");
             }
             setLoading(true);
-           const res=await fetch("/api/rew/note",{
+           const res=await fetch("https://note-taking-app-8825.onrender.com/rew/note",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify({message}),
