@@ -90,9 +90,7 @@ app.get("/cards", async(req,res)=>{
             console.log(error)
          }
    });  
-app.get("/",(req,res)=>{
-    res.send("Connection");
-})
+
 app.use(express.static(frontendPath));
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
