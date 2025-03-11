@@ -8,7 +8,7 @@ const Getpic = async(req,res) => {
         res.status(200).json(pic);
       }
       catch(error)
-      {console.log(error)}
+      {res.status(200).json({error:"error"})}
 }
 
 export default Getpic

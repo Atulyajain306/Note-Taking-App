@@ -9,7 +9,7 @@ const Getmessages = async(req,res) => {
         res.status(200).json(mess);
       }catch(error)
       {
-        console.log(error)
+        res.status(200).json({error:"error"})
       }
       
 

@@ -15,7 +15,7 @@ const Deletemessage = async(req,res) => {
           return res.status(200).json({success:"Message Deleted"});
       }catch(error)
       {
-        console.log(error)
+        res.status(200).json({error:"error"})
       }
 }
 

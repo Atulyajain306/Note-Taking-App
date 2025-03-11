@@ -14,7 +14,7 @@ const Getbody = async(req,res) => {
       }
       catch(error)
       {
-        console.log(error)
+        res.status(200).json({error:"error"})
       }
 }
 
