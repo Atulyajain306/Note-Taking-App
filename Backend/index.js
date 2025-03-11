@@ -30,7 +30,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 app.use(cors({
-    origin: ["https://note-taking-app-8825.onrender.com"],  // Replace with your frontend domain
+    origin: "https://note-taking-app-8825.onrender.com",  
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
