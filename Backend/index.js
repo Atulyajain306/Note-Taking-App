@@ -25,10 +25,6 @@ dotenv.config();
 const app=express()
 const __dirname=path.resolve();
 const frontendPath = path.join(__dirname, "../Frontend/dist");
-app.use(express.static(frontendPath));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(frontendPath, "index.html"));
-});
 app.use(cors({
     origin: "https://note-taking-app-8825.onrender.com",  
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -97,6 +93,10 @@ app.get("/cards", async(req,res)=>{
 app.get("/",(req,res)=>{
     res.send("Connection");
 })
+app.use(express.static(frontendPath));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
 app.listen(PORT,()=>{
     dbconnection();
     console.log("server is running on 3000")
