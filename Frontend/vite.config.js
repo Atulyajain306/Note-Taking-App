@@ -7,7 +7,7 @@ export default defineConfig({
   server: {  
     proxy: {
      '/api': {
-       target: 'http://localhost:3000',
+       target: 'https://note-taking-app-8825.onrender.com',
        changeOrigin: true,
        secure: false,
        rewrite: (path) => {
