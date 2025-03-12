@@ -107,11 +107,14 @@ const Home = () => {
 
         }
         const noteCreation=async()=>{  
+          console.log("Loading",Loading);
              setLoading(true); 
             setTimeout(async()=> {await Notecreation(message);
              FetchCards();
             setmessage("");
+            console.log("Loading2",Loading);
             setLoading(false);
+            console.log("Loading3",Loading);
             document.getElementById("textarea").style.height="44px";},2000);
         } 
        const Profile=(e)=>{
