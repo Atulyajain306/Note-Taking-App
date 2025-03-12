@@ -182,7 +182,8 @@ const Home = () => {
      { loading ? <ImSpinner8 className="h-8 w-8 relative z-20 left-[40vw] top-56 animate-spin text-slate-800" /> :  <Card bgtitle={bgtitle} setCards={setCards} />}
         
          <div className='absolute right-20 top-[85vh] flex items-center justify-center '>
-       { Loading ? < ImSpinner3 className="h-6 w-6 relative right-[51vw] z-20 justify-center items-center wx-2 top-1 animate-spin text-slate-800" />:<FaPencilAlt className='z-10 relative right-2 ' onClick={noteCreation} /> } 
+          <div className="relative">
+       { Loading ? < ImSpinner3 className="h-6 w-6 z-20 justify-center items-center  animate-spin text-slate-800" />:<FaPencilAlt className='z-10 relative right-2 ' onClick={noteCreation} /> } </div>
           
           <textarea type="text" value={ Listening? message + (transcript.length ? (message.length ? " ": "")+ transcript : "") : message} id='textarea'  onChange={(e)=>{
             setmessage(e.target.value);
