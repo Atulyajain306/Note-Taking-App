@@ -189,7 +189,7 @@ const Home = () => {
              e.target.style.height = 'auto';
             e.target.style.height = e.target.scrollHeight + 'px';
             
-           }}  className='md:w-[50vw] w-[370px] right-10 relative   resize-none flex overflow-x-auto border-black py-2 border placeholder-zinc-950 mx-1 bg-stone-100 rounded-xl break-words justify-center items-center scrollbar-thin h-11 min-h-11 max-h-[14vh]   scrollbar-thumb-gray-500 scrollbar-track-gray-200 px-8' placeholder='Enter text here...' rows="1" />
+           }}  className='md:w-[50vw] w-[260px] right-10 relative   resize-none flex overflow-x-auto border-black py-2 border placeholder-zinc-950 mx-1 bg-stone-100 rounded-xl break-words justify-center items-center scrollbar-thin h-11 min-h-11 max-h-[14vh]   scrollbar-thumb-gray-500 scrollbar-track-gray-200 px-8' placeholder='Enter text here...' rows="1" />
            <button onClick={Handlevoice} className={`${Listening? "bg-green-600" :"bg-red-500"} w-10 items-center justify-center md:w-44 md:flex hidden relative right-7 px-2 font-bold py-3 hover:cursor-pointer  gap-x-2 rounded-lg `}> {Listening ? <> <MdOutlineKeyboardVoice size={20} /> Listening</>:<><MdKeyboardVoice size={20} /> Start Recording</> }</button>
            <button onClick={Handlevoice} className='flex md:hidden'>{Listening ? <> <MdOutlineKeyboardVoice className='bg-green-600 size-10 rounded-md px-2 py-1' size={20} /> </>:<><MdKeyboardVoice className='bg-red-500 size-10 rounded-md px-2 py-1' /> </> }</button>
           <button onClick={l} className=' rounded-2xl text-xl bg-black items-center justify-center  text-white font-bold hidden  md:flex gap-x-2 fot-bold md:w-36 p-3'>Logout <TbLogout  size={30} /></button>
