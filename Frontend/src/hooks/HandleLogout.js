@@ -2,7 +2,7 @@ import { useAuthContext } from '../context/AuthContext'
 import toast from 'react-hot-toast';
 
 const HandleLogout = () => {
-    const {setauthUser}=useAuthContext();
+    const {setauthUser,setProfilepic}=useAuthContext();
    const Logout=async()=>{
          try{
               let res=await fetch("https://note-taking-app-8825.onrender.com/logout",{
@@ -17,6 +17,7 @@ const HandleLogout = () => {
               }
               localStorage.removeItem("item");
               setauthUser(null);
+              setProfilepic(null);
          }catch(error){
              toast.error(error.message);
          }
