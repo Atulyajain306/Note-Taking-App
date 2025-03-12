@@ -1,16 +1,14 @@
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
-import { useState } from "react";
 const HandleCreation = () => {
     const {savedmessages,setsavedmessages}=useAuthContext();
-    const [Loading,setLoading]=useState(false);
 
   const Notecreation=async(message)=>{
       try{
             if(!message || message.trim()==="" || message===undefined ){
               throw new Error("Message is empty");
             }
-            setLoading(true);
+            
            const res=await fetch("https://note-taking-app-8825.onrender.com/rew/note",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
@@ -28,11 +26,9 @@ const HandleCreation = () => {
 
       }catch(error){
         console.log(error);
-      }finally{
-        setLoading(false);
       }
   }
-  return {Notecreation,Loading}
+  return {Notecreation}
 }
 
 export default HandleCreation
