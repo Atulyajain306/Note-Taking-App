@@ -111,8 +111,8 @@ const Home = () => {
             setTimeout(async()=> {await Notecreation(message);
              FetchCards();
             setmessage("");
+            setLoading(false);
             document.getElementById("textarea").style.height="44px";},2000);
-            setTimeout(setLoading(true),1000);
         } 
        const Profile=(e)=>{
           setprofile(e.target.files[0]);
