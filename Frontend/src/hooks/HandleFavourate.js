@@ -1,6 +1,6 @@
 
 import toast from "react-hot-toast"
-import { useAuthContext } from "../context/Auth";
+import { useAuthContext } from "../context/AuthContext";
 const HandleFavourate = () => {
     const {favourates,setfavourates,savedmessages,setsavedmessages}=useAuthContext();
    const Liked=async(_id)=>{

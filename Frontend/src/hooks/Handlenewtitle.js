@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { useAuthContext } from "../context/Auth";
+import { useAuthContext } from "../context/AuthContext";
 const Handlenewtitle = () => {
          const {setsingleMessage,savedmessages,setsavedmessages,setupdated}=useAuthContext();
      const cardtitlenew=async (popuptitle,id)=>{

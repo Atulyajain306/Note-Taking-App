@@ -20,7 +20,7 @@ import Card from './Card';
 import HandleCreation from '../hooks/HandleCreation';
 import Handlegetpic from "../hooks/Handlegetpic"
 import HandleAudiomessages from '../hooks/HandleAudiomessages';
-import { useAuthContext } from '../context/Auth';
+import { useAuthContext } from '../context/AuthContext';
 import Handlecards from '../hooks/Handlecards';
 import toast from 'react-hot-toast';
 const Home = () => {

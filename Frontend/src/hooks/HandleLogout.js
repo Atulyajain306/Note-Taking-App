@@ -1,4 +1,4 @@
-import { useAuthContext } from '../context/Auth'
+import { useAuthContext } from '../context/AuthContext'
 import toast from 'react-hot-toast';
 
 const HandleLogout = () => {

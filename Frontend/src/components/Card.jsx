@@ -12,7 +12,7 @@ import { useState,useEffect, useCallback } from 'react';
 import { FaRegCopy } from "react-icons/fa";
 import { GoPlus } from "react-icons/go";
 import { FaRegStickyNote } from "react-icons/fa";
-import { useAuthContext } from '../context/Auth';
+import { useAuthContext } from '../context/AuthContext';
 import { extractTime } from '../../../Backend/utils/extractTime';
 import HandleDelete from '../hooks/HandleDelete';
 import HandleEdit from '../hooks/HandleEdit';

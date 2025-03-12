@@ -1,6 +1,6 @@
 
 import toast from "react-hot-toast"
-import { useAuthContext } from "../context/Auth";
+import { useAuthContext } from "../context/AuthContext";
 const Handlefile = () => {
     const {setsingleMessage}=useAuthContext();
     const Fileadd=async(formData,id)=>{

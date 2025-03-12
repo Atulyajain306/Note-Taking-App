@@ -1,4 +1,4 @@
-import { useAuthContext } from "../context/Auth";
+import { useAuthContext } from "../context/AuthContext";
 import { useEffect,useCallback } from "react";
 const Handlegetpic = () => {
        const {setProfilepic}=useAuthContext();

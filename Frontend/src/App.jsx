@@ -5,7 +5,7 @@ import Signup from './components/Signup'
 import Home from './components/Home'
 import DetailPage from './components/DetailPage'
 import {Routes,Route, Navigate} from "react-router-dom"
-import { useAuthContext } from './context/Auth'
+import { useAuthContext } from './context/AuthContext'
 function App() {
     const {authUser,isAuth}=useAuthContext();
   return (
