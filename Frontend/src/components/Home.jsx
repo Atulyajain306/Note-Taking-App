@@ -26,8 +26,7 @@ import toast from 'react-hot-toast';
 const Home = () => {
        const [name, setname] = useState([]);
        const [color,setcolor]=useState(false);
-       const [Loading,setLoading]=useState(false);
-  const {Listening,transcript,startListening,stopListening}=Handlespeechtotext({continuous:true});
+  const {Listening,transcript,startListening,stopListening,Load,setLoad}=Handlespeechtotext({continuous:true});
        const {savedmessages,setsavedmessages,profilepic}=useAuthContext();
        const Edit=["Create Notes","No Favourites Added","No Related titles Found"];
         const [bgtitle, setbgtitle] = useState("Create Notes");
@@ -39,6 +38,7 @@ const Home = () => {
         const {Getpic}=Handlegetpic();
          const [profile, setprofile] = useState(null)
          const [Search, setSearch] = useState("")
+         const [Loading, setLoading] = useState(false)
          const [message, setmessage] = useState("");
          const [cards, setCards] = useState([]);
          const [picture, setpicture] = useState(profilepic);
@@ -106,25 +106,14 @@ const Home = () => {
              setSearch(""); 
 
         }
-        const noteCreation = async () => {
-          console.log("Loading (before setting to true):", Loading);
-          setLoading(true);
-      
-          try {
-              await Notecreation(message);
-              await FetchCards();
-              setmessage("");
-              document.getElementById("textarea").style.height = "44px";
-          } catch (error) {
-              console.error("Error in noteCreation:", error);
-          } finally {
-              setTimeout(() => {
-                  setLoading(false); // Ensuring state update after timeout
-                  console.log("Loading (after setting to false):", Loading);
-              }, 2000);
-          }
-      };
-      
+        const noteCreation=async()=>{ 
+              setLoading(true);
+             await Notecreation(message);
+              FetchCards();
+             setmessage("");
+             document.getElementById("textarea").style.height="44px";
+             setTimeout(setLoading(false),1000);
+        }
        const Profile=(e)=>{
           setprofile(e.target.files[0]);
           
@@ -193,10 +182,7 @@ const Home = () => {
      { loading ? <ImSpinner8 className="h-8 w-8 relative z-20 left-[40vw] top-56 animate-spin text-slate-800" /> :  <Card bgtitle={bgtitle} setCards={setCards} />}
         
          <div className='absolute right-20 top-[85vh] flex items-center justify-center '>
-          
-   { Loading ? <div className="absolute inset-0 flex items-center justify-center bg-white">
-    <ImSpinner3 className="h-6 w-6 animate-spin text-slate-800" />
-  </div> :<FaPencilAlt className='z-10 relative right-2 ' onClick={noteCreation} /> }
+       { Loading ||Load ? < ImSpinner3 className="h-6 w-6 relative right-[51vw] z-20 justify-center items-center wx-2 top-1 animate-spin text-slate-800" />:<FaPencilAlt className='z-10 relative right-2 ' onClick={noteCreation} /> } 
           
           <textarea type="text" value={ Listening? message + (transcript.length ? (message.length ? " ": "")+ transcript : "") : message} id='textarea'  onChange={(e)=>{
             setmessage(e.target.value);

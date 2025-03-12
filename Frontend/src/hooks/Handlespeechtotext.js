@@ -1,6 +1,7 @@
 import { useRef,useState,useEffect } from "react";
 
 const Handlespeechtotext = (options) => {
+    const [Load, setLoad] = useState(false)
      const [Listening, setListening] = useState(false);
      const [transcript, settranscript] = useState("");
      const Recognitionref=useRef(null);
@@ -51,17 +52,17 @@ const startListening=()=>{
     if(Recognitionref.current && !Listening){
         Recognitionref.current.start();
         setListening(true);
-        
+       
     }
 }
 const stopListening=()=>{
     if(Recognitionref.current && Listening){
         Recognitionref.current.stop();
         setListening(false);
-        
+        setLoad(false);
     }
 }
-   return {Listening,transcript,startListening,stopListening}
+   return {Listening,transcript,startListening,stopListening,Load,setLoad}
 
 }
 export default Handlespeechtotext
