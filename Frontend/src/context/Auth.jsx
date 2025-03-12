@@ -1,9 +1,6 @@
-import  { useContext,createContext,useState  } from 'react'
+import  {useState} from 'react'
 import PropTypes from "prop-types";
-export const AuthContext=createContext();
-export const useAuthContext=()=>{
-       return (useContext(AuthContext))
-}
+import { AuthContext } from './AuthContext';
 
 export const AuthContextProvider=({children})=>{
 const [authUser,setauthUser] = useState(JSON.parse(localStorage.getItem("item")) || null);
