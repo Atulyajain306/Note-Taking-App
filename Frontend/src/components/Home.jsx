@@ -108,11 +108,12 @@ const Home = () => {
         }
         const noteCreation=async()=>{  
              setLoading(true); 
-             await Notecreation(message);
-              FetchCards();
-             setmessage("");
-             document.getElementById("textarea").style.height="44px";
-        }
+            setTimeout(async()=> {await Notecreation(message);
+             FetchCards();
+            setmessage("");
+            document.getElementById("textarea").style.height="44px";},2000);
+            setTimeout(setLoading(true),1000);
+        } 
        const Profile=(e)=>{
           setprofile(e.target.files[0]);
           
