@@ -1,9 +1,9 @@
 import { useAuthContext } from "../context/AuthContext";
-import { useEffect } from "react";
+import { useEffect,useCallback } from "react";
 const Handlegetpic = () => {
        const {setProfilepic}=useAuthContext();
        
-   const Getpic=async()=>{
+   const Getpic=useCallback(async()=>{
     try{
        let res=await fetch("https://note-taking-app-8825.onrender.com/getpic",{
            method:"GET",
@@ -22,11 +22,11 @@ const Handlegetpic = () => {
     catch(error){
        console.log(error);
     }
-}
+},[setProfilepic])
 
 useEffect(() => {
     Getpic();
-  }, [])
+  }, [Getpic])
    return {Getpic}
 }
 
