@@ -21,6 +21,8 @@ import Edittitle from "./controllers/Edittitle.js";
 import Getpic from "./controllers/Getpic.js";
 import User from "./models/User.js";
 import Audio from "./models/Audio.js";
+import {v2 as cloudinary} from "cloudinary";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
 dotenv.config();
 const app=express()
 const __dirname=path.resolve();
@@ -48,19 +50,25 @@ app.post("/newtitle",protectroute,Edittitle)
 app.post("/delete",protectroute,Deletemessage)
 app.post("/edit",protectroute,Editmessages)
 const PORT=process.env.PORT;
-const storage=multer.diskStorage({
-    destination:(req,file,cd)=>{
-        cd(null,"./uploads");
-    },
-    filename:(req,file,cd)=>{
-        cd(null, file.originalname );
-    }
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
 });
-const upload=multer({storage:storage});
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: async (req, file) => ({
+        folder: "uploads",
+        format: file.mimetype.split("/")[1], // Keeps original format
+        public_id: file.originalname.split(".")[0],
+    }),
+});
+const upload=multer({storage});
 app.post("/upload/:id",upload.single("image"),async function(req,res){
          const {id}=req.params;
-         const user=await Message.findByIdAndUpdate(id,{ImageURL:`/uploads/${req.file.filename}`},{new:true});
-         const u=await Audio.findByIdAndUpdate(id,{ImageURL:`/uploads/${req.file.filename}`},{new:true});
+         const user=await Message.findByIdAndUpdate(id,{ImageURL:req.file.path || req.file.url},{new:true});
+         const u=await Audio.findByIdAndUpdate(id,{ImageURL:req.file.path || req.file.url},{new:true});
           console.log(user); 
           if(!user){
             return res.status(200).json(u.ImageURL);
@@ -72,7 +80,7 @@ app.post("/upload/:id",upload.single("image"),async function(req,res){
 
 app.post("/upload/profilepic/:id",upload.single("Profile"),async function(req,res){
     const {id}=req.params;
-    const user=await User.findByIdAndUpdate(id,{Profilepic:`/uploads/${req.file.filename}`},{new:true});
+    const user=await User.findByIdAndUpdate(id,{Profilepic:req.file.path || req.file.url},{new:true});
     console.log(user);
     return res.status(200).json({Profilepic:user.Profilepic});
 });    
