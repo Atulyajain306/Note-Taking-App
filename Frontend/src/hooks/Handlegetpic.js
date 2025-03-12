@@ -16,7 +16,7 @@ const Handlegetpic = () => {
            throw new Error(data.error);
        }
         let r=data;
-       setProfilepic(r || "");
+       setProfilepic(r || null);
        
     }
     catch(error){

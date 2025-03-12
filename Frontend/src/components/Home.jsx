@@ -106,17 +106,25 @@ const Home = () => {
              setSearch(""); 
 
         }
-        const noteCreation=async()=>{  
-          console.log("Loading",Loading);
-             setLoading(true); 
-            setTimeout(async()=> {await Notecreation(message);
-             FetchCards();
-            setmessage("");
-            console.log("Loading2",Loading);
-            setLoading(false);
-            console.log("Loading3",Loading);
-            document.getElementById("textarea").style.height="44px";},2000);
-        } 
+        const noteCreation = async () => {
+          console.log("Loading (before setting to true):", Loading);
+          setLoading(true);
+      
+          try {
+              await Notecreation(message);
+              await FetchCards();
+              setmessage("");
+              document.getElementById("textarea").style.height = "44px";
+          } catch (error) {
+              console.error("Error in noteCreation:", error);
+          } finally {
+              setTimeout(() => {
+                  setLoading(false); // Ensuring state update after timeout
+                  console.log("Loading (after setting to false):", Loading);
+              }, 2000);
+          }
+      };
+      
        const Profile=(e)=>{
           setprofile(e.target.files[0]);
           
