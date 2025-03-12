@@ -52,6 +52,7 @@ const startListening=()=>{
     if(Recognitionref.current && !Listening){
         Recognitionref.current.start();
         setListening(true);
+        setLoad(true);
     }
 }
 const stopListening=()=>{
