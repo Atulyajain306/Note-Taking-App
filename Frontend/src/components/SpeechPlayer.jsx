@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import PropTypes from "prop-types";
+import { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types"; 
 import { FaCirclePlay, FaCirclePause } from "react-icons/fa6";
 import { RxDownload } from "react-icons/rx";
 
@@ -11,31 +11,10 @@ const SpeechPlayer = ({ message }) => {
 
   const synth = useRef(window.speechSynthesis);
   const utteranceRef = useRef(null);
+  const lastCharIndex = useRef(0);
   const animationRef = useRef(null);
-  const startTimeRef = useRef(null);
-  const pauseTimeRef = useRef(null);
-  const estimatedDurationRef = useRef(null);
-
-  
-  const animateProgress = useCallback(() => {
-    const update = () => {
-      if (!synth.current.speaking || isPaused) {
-        cancelAnimationFrame(animationRef.current);
-        return;
-      }
-
-      const elapsed = Date.now() - startTimeRef.current;
-      const newProgress = (elapsed / estimatedDurationRef.current) * 100;
-
-      setProgress((prev) => Math.min(Math.max(prev, newProgress), 100));
-
-      animationRef.current = requestAnimationFrame(update);
-    };
-
-    if (!isPaused) {
-      animationRef.current = requestAnimationFrame(update);
-    }
-  }, [isPaused]);
+  const startTimeRef = useRef(null); 
+  const estimatedDurationRef = useRef(null); 
 
   useEffect(() => {
     if (!synth.current) {
@@ -59,23 +38,44 @@ const SpeechPlayer = ({ message }) => {
     updateVoices();
     synth.current.onvoiceschanged = updateVoices;
 
-    utterance.onstart = () => {
-      startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 50;
-      setProgress(0);
-      setIsPlaying(true);
-      setIsPaused(false);
-      animateProgress();
-    };
-
     utterance.onend = () => {
       setIsPlaying(false);
       setIsPaused(false);
       setProgress(100);
-      cancelAnimationFrame(animationRef.current);
-      setTimeout(() => setProgress(0), 800);
+      setTimeout(() => setProgress(0), 300);
+      cancelAnimationFrame(animationRef.current); 
     };
-  }, [message, animateProgress]);
+
+    utterance.onboundary = (event) => {
+      cancelAnimationFrame(animationRef.current);
+      lastCharIndex.current = event.charIndex;
+      setProgress(((event.charIndex / message.length) * 100)); 
+    };
+    utterance.onstart = () => {
+      startTimeRef.current = Date.now();
+      estimatedDurationRef.current = message.length * 50; 
+      cancelAnimationFrame(animationRef.current);// Rough estimate (50ms per character)
+      setProgress(0); // Fix: Reset progress when speech starts
+    };
+
+  }, [message]);
+
+  const animateProgress = () => {
+    const update = () => {
+      if (!synth.current.speaking || isPaused) {
+        cancelAnimationFrame(animationRef.current);
+        return;
+      }
+
+      const elapsed = Date.now() - startTimeRef.current;
+      const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
+
+      setProgress((prev) => Math.min(Math.max(prev, estimatedProgress), 100));
+
+      animationRef.current = requestAnimationFrame(update);
+    };
+    animationRef.current = requestAnimationFrame(update);
+  };
 
   const toggleSpeech = () => {
     if (!synth.current) return;
@@ -84,22 +84,20 @@ const SpeechPlayer = ({ message }) => {
       synth.current.pause();
       setIsPaused(true);
       setIsPlaying(false);
-      pauseTimeRef.current = Date.now();
       cancelAnimationFrame(animationRef.current);
     } else if (isPaused) {
       synth.current.resume();
       setIsPaused(false);
       setIsPlaying(true);
-      startTimeRef.current += Date.now() - pauseTimeRef.current; // Adjust start time
-      animateProgress(); 
+      animateProgress();
     } else {
       synth.current.cancel();
       setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
-      startTimeRef.current = Date.now();
+      lastCharIndex.current = 0;
       synth.current.speak(utteranceRef.current);
-      animateProgress(); // ✅ Start animation
+      animateProgress();
     }
   };
 
@@ -117,14 +115,8 @@ const SpeechPlayer = ({ message }) => {
         </button>
       </div>
       <div className="relative w-[65vw] h-1 bg-gray-300 rounded-full mt-2">
-        <div
-          className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-[50ms] ease-linear"
-          style={{ width: `${progress}%` }}
-        ></div>
-        <div
-          className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-[50ms] ease-linear"
-          style={{ left: `${progress}%`, transform: "translateX(-50%)" }}
-        ></div>
+        <div className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-200 ease-linear" style={{ width: `${progress}%` }}></div>
+        <div className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-200 ease-linear" style={{ left: `${progress}%` }}></div>
       </div>
       <a
         href={audioURL}
@@ -137,6 +129,7 @@ const SpeechPlayer = ({ message }) => {
     </div>
   );
 };
+
 
 SpeechPlayer.propTypes = {
   message: PropTypes.string.isRequired,

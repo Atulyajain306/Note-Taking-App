@@ -26,7 +26,7 @@ import toast from 'react-hot-toast';
 const Home = () => {
        const [name, setname] = useState([]);
        const [color,setcolor]=useState(false);
-  const {Listening,transcript,startListening,stopListening,Load,setLoad}=Handlespeechtotext({continuous:true});
+  const {Listening,transcript,startListening,stopListening,setLoad}=Handlespeechtotext({continuous:true});
        const {savedmessages,setsavedmessages,profilepic}=useAuthContext();
        const Edit=["Create Notes","No Favourites Added","No Related titles Found"];
         const [bgtitle, setbgtitle] = useState("Create Notes");
@@ -112,7 +112,7 @@ const Home = () => {
               FetchCards();
              setmessage("");
              document.getElementById("textarea").style.height="44px";
-             setTimeout(setLoading(false),1000);
+             setTimeout(()=>setLoading(false),1000);
         }
        const Profile=(e)=>{
           setprofile(e.target.files[0]);
@@ -182,7 +182,7 @@ const Home = () => {
      { loading ? <ImSpinner8 className="h-8 w-8 relative z-20 left-[40vw] top-56 animate-spin text-slate-800" /> :  <Card bgtitle={bgtitle} setCards={setCards} />}
         
          <div className='absolute right-20 top-[85vh] flex items-center justify-center '>
-       { (Loading ||Load) ? <div><ImSpinner3 className="h-6 w-6  relative right-[51vw] z-30 justify-center items-center  top-1 animate-spin text-slate-800" /></div>:<FaPencilAlt className='z-10 relative right-2 ' onClick={noteCreation} /> } 
+       { (Loading) ? <div><ImSpinner3 className="h-6 w-6  relative right-[51vw] z-30 justify-center items-center  top-1 animate-spin text-slate-800" /></div>:<FaPencilAlt className='z-10 relative right-2 ' onClick={noteCreation} /> } 
           
           <textarea type="text" value={ Listening? message + (transcript.length ? (message.length ? " ": "")+ transcript : "") : message} id='textarea'  onChange={(e)=>{
             setmessage(e.target.value);
