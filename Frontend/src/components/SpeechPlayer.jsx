@@ -14,9 +14,10 @@ const SpeechPlayer = ({ message }) => {
   const animationRef = useRef(null);
   const lastCharIndex = useRef(0);
   const startTimeRef = useRef(null);
+  const pauseTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
 
-  
+  // **✅ Smooth animation function**
   const animateProgress = useCallback(() => {
     const update = () => {
       if (!synth.current.speaking || isPaused) {
@@ -32,7 +33,7 @@ const SpeechPlayer = ({ message }) => {
       animationRef.current = requestAnimationFrame(update);
     };
 
-    cancelAnimationFrame(animationRef.current); 
+    cancelAnimationFrame(animationRef.current); // Avoid duplicate calls
     animationRef.current = requestAnimationFrame(update);
   }, [isPaused]);
 
@@ -68,7 +69,7 @@ const SpeechPlayer = ({ message }) => {
     utterance.onboundary = (event) => {
       lastCharIndex.current = event.charIndex;
       const wordProgress = (event.charIndex / message.length) * 100;
-      setProgress((prev) => Math.max(prev, wordProgress));
+      setProgress(wordProgress);
     };
 
     utterance.onend = () => {
@@ -87,11 +88,13 @@ const SpeechPlayer = ({ message }) => {
       synth.current.pause();
       setIsPaused(true);
       setIsPlaying(false);
+      pauseTimeRef.current = Date.now();
       cancelAnimationFrame(animationRef.current);
     } else if (isPaused) {
       synth.current.resume();
       setIsPaused(false);
       setIsPlaying(true);
+      startTimeRef.current += Date.now() - pauseTimeRef.current; // Adjust time to avoid jump
       animateProgress();
     } else {
       synth.current.cancel();
@@ -99,6 +102,7 @@ const SpeechPlayer = ({ message }) => {
       setIsPlaying(true);
       setIsPaused(false);
       lastCharIndex.current = 0;
+      startTimeRef.current = Date.now();
       synth.current.speak(utteranceRef.current);
       animateProgress();
     }
