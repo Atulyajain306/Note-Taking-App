@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import PropTypes from "prop-types";
 import { FaCirclePlay, FaCirclePause } from "react-icons/fa6";
 import { RxDownload } from "react-icons/rx";
@@ -15,7 +15,25 @@ const SpeechPlayer = ({ message }) => {
   const lastCharIndex = useRef(0);
   const startTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
-  const resumeOffsetRef = useRef(0); // Track offset for resuming  
+  const resumeOffsetRef = useRef(0);
+
+  const animateProgress = useCallback(() => {
+    const update = () => {
+      if (!synth.current.speaking || isPaused) {
+        cancelAnimationFrame(animationRef.current);
+        return;
+      }
+
+      const elapsed = Date.now() - startTimeRef.current;
+      const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
+
+      setProgress((prev) => Math.min(Math.max(prev, estimatedProgress), 100));
+
+      animationRef.current = requestAnimationFrame(update);
+    };
+
+    animationRef.current = requestAnimationFrame(update);
+  }, [isPaused]);
 
   useEffect(() => {
     if (!synth.current) {
@@ -50,61 +68,43 @@ const SpeechPlayer = ({ message }) => {
     utterance.onboundary = (event) => {
       lastCharIndex.current = event.charIndex;
       const wordProgress = (event.charIndex / message.length) * 100;
-      setProgress((prev) => Math.max(prev, wordProgress)); // Ensure progress moves forward smoothly
+      setProgress((prev) => Math.max(prev, wordProgress));
     };
 
     utterance.onstart = () => {
       startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 60; // More accurate estimate
-      setProgress(resumeOffsetRef.current); // Use saved progress if resuming
-      animateProgress();
+      estimatedDurationRef.current = message.length * 60;
+      setProgress(resumeOffsetRef.current);
+
+      // **✅ Ensure animation starts immediately**
+      setTimeout(() => animateProgress(), 50);
     };
-  }, [message]);
-
-  const animateProgress = () => {
-    const update = () => {
-      if (!synth.current.speaking || isPaused) {
-        cancelAnimationFrame(animationRef.current);
-        return;
-      }
-
-      const elapsed = Date.now() - startTimeRef.current;
-      const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
-
-      setProgress((prev) => Math.min(Math.max(prev, estimatedProgress), 100));
-
-      animationRef.current = requestAnimationFrame(update);
-    };
-
-    animationRef.current = requestAnimationFrame(update);
-  };
+  }, [message, animateProgress]); // **✅ Added animateProgress to the dependency array safely**
 
   const toggleSpeech = () => {
     if (!synth.current) return;
 
     if (synth.current.speaking && !synth.current.paused) {
-      // PAUSE
       synth.current.pause();
-      resumeOffsetRef.current = progress; // Save progress
+      resumeOffsetRef.current = progress;
       setIsPaused(true);
       setIsPlaying(false);
       cancelAnimationFrame(animationRef.current);
     } else if (isPaused) {
-      // RESUME
       synth.current.resume();
       setIsPaused(false);
       setIsPlaying(true);
-      animateProgress(); // Restart animation
+      animateProgress();
     } else {
-      // START
       synth.current.cancel();
       setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
       lastCharIndex.current = 0;
-      resumeOffsetRef.current = 0; // Reset resume offset
+      resumeOffsetRef.current = 0;
       synth.current.speak(utteranceRef.current);
-      animateProgress();
+      
+      setTimeout(() => animateProgress(), 50);
     }
   };
 
@@ -148,3 +148,4 @@ SpeechPlayer.propTypes = {
 };
 
 export default SpeechPlayer;
+
