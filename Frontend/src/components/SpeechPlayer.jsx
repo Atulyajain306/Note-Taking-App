@@ -15,6 +15,7 @@ const SpeechPlayer = ({ message }) => {
   const animationRef = useRef(null);
   const startTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
+  const isManualUpdate = useRef(false);
 
   useEffect(() => {
     if (!synth.current) {
@@ -47,14 +48,16 @@ const SpeechPlayer = ({ message }) => {
     };
 
     utterance.onboundary = (event) => {
-      lastCharIndex.current = event.charIndex;
-      const wordProgress = (event.charIndex / message.length) * 100;
-      setProgress((prev) => Math.max(prev, wordProgress)); // Prevent jump-back effect
+      if (!isManualUpdate.current) {
+        lastCharIndex.current = event.charIndex;
+        const wordProgress = (event.charIndex / message.length) * 100;
+        setProgress((prev) => Math.max(prev, wordProgress)); // Ensure progress moves forward smoothly
+      }
     };
 
     utterance.onstart = () => {
       startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 60; // Adjusted for better accuracy
+      estimatedDurationRef.current = message.length * 60; // More precise timing
       setProgress(0);
       cancelAnimationFrame(animationRef.current);
       animateProgress();
@@ -62,6 +65,8 @@ const SpeechPlayer = ({ message }) => {
   }, [message]);
 
   const animateProgress = () => {
+    isManualUpdate.current = true; // Prevents immediate boundary jumps
+
     const update = () => {
       if (!synth.current.speaking || isPaused) {
         cancelAnimationFrame(animationRef.current);
@@ -75,6 +80,7 @@ const SpeechPlayer = ({ message }) => {
 
       animationRef.current = requestAnimationFrame(update);
     };
+
     animationRef.current = requestAnimationFrame(update);
   };
 
@@ -97,6 +103,7 @@ const SpeechPlayer = ({ message }) => {
       setIsPlaying(true);
       setIsPaused(false);
       lastCharIndex.current = 0;
+      isManualUpdate.current = false; // Allows smoother boundary updates
       synth.current.speak(utteranceRef.current);
       animateProgress();
     }
@@ -117,11 +124,11 @@ const SpeechPlayer = ({ message }) => {
       </div>
       <div className="relative w-[65vw] h-1 bg-gray-300 rounded-full mt-2">
         <div
-          className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-100 ease-linear"
+          className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-200 ease-linear"
           style={{ width: `${progress}%` }}
         ></div>
         <div
-          className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-100 ease-linear"
+          className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-200 ease-linear"
           style={{ left: `${progress}%`, transform: "translateX(-50%)" }}
         ></div>
       </div>
