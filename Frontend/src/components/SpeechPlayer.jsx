@@ -12,7 +12,6 @@ const SpeechPlayer = ({ message }) => {
   const synth = useRef(window.speechSynthesis);
   const utteranceRef = useRef(null);
   const animationRef = useRef(null);
-  const lastCharIndex = useRef(0);
   const startTimeRef = useRef(null);
   const pauseTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
@@ -60,19 +59,11 @@ const SpeechPlayer = ({ message }) => {
 
     utterance.onstart = () => {
       startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 50; 
-      setProgress(0); 
+      estimatedDurationRef.current = message.length * 50;
+      setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
-      setTimeout(() => { 
-        animateProgress();
-      }, 50);
-    };
-
-    utterance.onboundary = (event) => {
-      lastCharIndex.current = event.charIndex;
-      const wordProgress = (event.charIndex / message.length) * 100;
-      setProgress(wordProgress);
+      animateProgress();
     };
 
     utterance.onend = () => {
@@ -104,7 +95,6 @@ const SpeechPlayer = ({ message }) => {
       setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
-      lastCharIndex.current = 0;
       startTimeRef.current = Date.now();
       synth.current.speak(utteranceRef.current);
       animateProgress();
@@ -151,4 +141,3 @@ SpeechPlayer.propTypes = {
 };
 
 export default SpeechPlayer;
-
