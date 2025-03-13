@@ -18,7 +18,7 @@ const SpeechPlayer = ({ message }) => {
 
   const animateProgress = useCallback(() => {
     const update = () => {
-      if (isPaused) return; 
+      if (isPaused) return; // Prevent animation while paused
 
       const elapsed = Date.now() - startTimeRef.current;
       const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
@@ -62,7 +62,7 @@ const SpeechPlayer = ({ message }) => {
       setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
-      setTimeout(() => animateProgress(), 50); 
+      setTimeout(() => animateProgress(), 50); // Delay to ensure speech starts
     };
 
     utterance.onend = () => {
