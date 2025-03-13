@@ -17,7 +17,6 @@ const SpeechPlayer = ({ message }) => {
   const pauseTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
 
-  // **✅ Smooth animation function**
   const animateProgress = useCallback(() => {
     const update = () => {
       if (!synth.current.speaking || isPaused) {
@@ -28,12 +27,12 @@ const SpeechPlayer = ({ message }) => {
       const elapsed = Date.now() - startTimeRef.current;
       const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
 
-      setProgress((prev) => Math.max(prev, Math.min(estimatedProgress, 100)));
+      setProgress(Math.min(estimatedProgress, 100));
 
       animationRef.current = requestAnimationFrame(update);
     };
 
-    cancelAnimationFrame(animationRef.current); // Avoid duplicate calls
+    cancelAnimationFrame(animationRef.current);
     animationRef.current = requestAnimationFrame(update);
   }, [isPaused]);
 
@@ -63,6 +62,8 @@ const SpeechPlayer = ({ message }) => {
       startTimeRef.current = Date.now();
       estimatedDurationRef.current = message.length * 50;
       setProgress(0);
+      setIsPlaying(true);
+      setIsPaused(false);
       animateProgress();
     };
 
@@ -77,7 +78,7 @@ const SpeechPlayer = ({ message }) => {
       setIsPaused(false);
       setProgress(100);
       cancelAnimationFrame(animationRef.current);
-      setTimeout(() => setProgress(0), 500);
+      setTimeout(() => setProgress(0), 800);
     };
   }, [message, animateProgress]);
 
@@ -94,7 +95,7 @@ const SpeechPlayer = ({ message }) => {
       synth.current.resume();
       setIsPaused(false);
       setIsPlaying(true);
-      startTimeRef.current += Date.now() - pauseTimeRef.current; // Adjust time to avoid jump
+      startTimeRef.current += Date.now() - pauseTimeRef.current;
       animateProgress();
     } else {
       synth.current.cancel();
@@ -123,11 +124,11 @@ const SpeechPlayer = ({ message }) => {
       </div>
       <div className="relative w-[65vw] h-1 bg-gray-300 rounded-full mt-2">
         <div
-          className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-200 ease-linear"
+          className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-100 ease-linear"
           style={{ width: `${progress}%` }}
         ></div>
         <div
-          className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-200 ease-linear"
+          className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-100 ease-linear"
           style={{ left: `${progress}%`, transform: "translateX(-50%)" }}
         ></div>
       </div>
@@ -148,3 +149,4 @@ SpeechPlayer.propTypes = {
 };
 
 export default SpeechPlayer;
+
