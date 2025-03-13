@@ -60,11 +60,13 @@ const SpeechPlayer = ({ message }) => {
 
     utterance.onstart = () => {
       startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 50;
-      setProgress(0);
+      estimatedDurationRef.current = message.length * 50; 
+      setProgress(0); 
       setIsPlaying(true);
       setIsPaused(false);
-      animateProgress();
+      setTimeout(() => { 
+        animateProgress();
+      }, 50);
     };
 
     utterance.onboundary = (event) => {
