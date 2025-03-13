@@ -15,8 +15,8 @@ const SpeechPlayer = ({ message }) => {
   const lastCharIndex = useRef(0);
   const startTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
-  const resumeOffsetRef = useRef(0);
 
+  // **✅ Animate progress immediately**
   const animateProgress = useCallback(() => {
     const update = () => {
       if (!synth.current.speaking || isPaused) {
@@ -27,7 +27,7 @@ const SpeechPlayer = ({ message }) => {
       const elapsed = Date.now() - startTimeRef.current;
       const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
 
-      setProgress((prev) => Math.min(Math.max(prev, estimatedProgress), 100));
+      setProgress(Math.min(estimatedProgress, 100));
 
       animationRef.current = requestAnimationFrame(update);
     };
@@ -73,20 +73,17 @@ const SpeechPlayer = ({ message }) => {
 
     utterance.onstart = () => {
       startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 60;
-      setProgress(resumeOffsetRef.current);
-
-      // **✅ Ensure animation starts immediately**
-      setTimeout(() => animateProgress(), 50);
+      estimatedDurationRef.current = message.length * 50; // Approximate duration
+      setProgress(0);
+      animateProgress(); // **🔥 Start animation immediately**
     };
-  }, [message, animateProgress]); // **✅ Added animateProgress to the dependency array safely**
+  }, [message, animateProgress]);
 
   const toggleSpeech = () => {
     if (!synth.current) return;
 
     if (synth.current.speaking && !synth.current.paused) {
       synth.current.pause();
-      resumeOffsetRef.current = progress;
       setIsPaused(true);
       setIsPlaying(false);
       cancelAnimationFrame(animationRef.current);
@@ -101,10 +98,8 @@ const SpeechPlayer = ({ message }) => {
       setIsPlaying(true);
       setIsPaused(false);
       lastCharIndex.current = 0;
-      resumeOffsetRef.current = 0;
       synth.current.speak(utteranceRef.current);
-      
-      setTimeout(() => animateProgress(), 50);
+      animateProgress(); // **🔥 Start progress animation**
     }
   };
 
@@ -148,4 +143,3 @@ SpeechPlayer.propTypes = {
 };
 
 export default SpeechPlayer;
-
