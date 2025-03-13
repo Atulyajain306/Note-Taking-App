@@ -16,7 +16,7 @@ const SpeechPlayer = ({ message }) => {
   const startTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
 
-  // **✅ Animate progress immediately**
+  
   const animateProgress = useCallback(() => {
     const update = () => {
       if (!synth.current.speaking || isPaused) {
@@ -27,11 +27,12 @@ const SpeechPlayer = ({ message }) => {
       const elapsed = Date.now() - startTimeRef.current;
       const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
 
-      setProgress(Math.min(estimatedProgress, 100));
+      setProgress((prev) => Math.max(prev, Math.min(estimatedProgress, 100)));
 
       animationRef.current = requestAnimationFrame(update);
     };
 
+    cancelAnimationFrame(animationRef.current); 
     animationRef.current = requestAnimationFrame(update);
   }, [isPaused]);
 
@@ -57,12 +58,11 @@ const SpeechPlayer = ({ message }) => {
     updateVoices();
     synth.current.onvoiceschanged = updateVoices;
 
-    utterance.onend = () => {
-      setIsPlaying(false);
-      setIsPaused(false);
-      setProgress(100);
-      cancelAnimationFrame(animationRef.current);
-      setTimeout(() => setProgress(0), 500);
+    utterance.onstart = () => {
+      startTimeRef.current = Date.now();
+      estimatedDurationRef.current = message.length * 50;
+      setProgress(0);
+      animateProgress();
     };
 
     utterance.onboundary = (event) => {
@@ -71,11 +71,12 @@ const SpeechPlayer = ({ message }) => {
       setProgress((prev) => Math.max(prev, wordProgress));
     };
 
-    utterance.onstart = () => {
-      startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 50; // Approximate duration
-      setProgress(0);
-      animateProgress(); // **🔥 Start animation immediately**
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+      setProgress(100);
+      cancelAnimationFrame(animationRef.current);
+      setTimeout(() => setProgress(0), 500);
     };
   }, [message, animateProgress]);
 
@@ -99,7 +100,7 @@ const SpeechPlayer = ({ message }) => {
       setIsPaused(false);
       lastCharIndex.current = 0;
       synth.current.speak(utteranceRef.current);
-      animateProgress(); // **🔥 Start progress animation**
+      animateProgress();
     }
   };
 
