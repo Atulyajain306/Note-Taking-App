@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import PropTypes from "prop-types"; 
+import PropTypes from "prop-types";
 import { FaCirclePlay, FaCirclePause } from "react-icons/fa6";
 import { RxDownload } from "react-icons/rx";
 
@@ -13,8 +13,8 @@ const SpeechPlayer = ({ message }) => {
   const utteranceRef = useRef(null);
   const lastCharIndex = useRef(0);
   const animationRef = useRef(null);
-  const startTimeRef = useRef(null); 
-  const estimatedDurationRef = useRef(null); 
+  const startTimeRef = useRef(null);
+  const estimatedDurationRef = useRef(null);
 
   useEffect(() => {
     if (!synth.current) {
@@ -42,22 +42,23 @@ const SpeechPlayer = ({ message }) => {
       setIsPlaying(false);
       setIsPaused(false);
       setProgress(100);
-      setTimeout(() => setProgress(0), 300);
-      cancelAnimationFrame(animationRef.current); 
+      cancelAnimationFrame(animationRef.current);
+      setTimeout(() => setProgress(0), 500);
     };
 
     utterance.onboundary = (event) => {
-      cancelAnimationFrame(animationRef.current);
       lastCharIndex.current = event.charIndex;
-      setProgress(((event.charIndex / message.length) * 100)); 
-    };
-    utterance.onstart = () => {
-      startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 50; 
-      cancelAnimationFrame(animationRef.current);// Rough estimate (50ms per character)
-      setProgress(0); // Fix: Reset progress when speech starts
+      const wordProgress = (event.charIndex / message.length) * 100;
+      setProgress((prev) => Math.max(prev, wordProgress)); // Prevent jump-back effect
     };
 
+    utterance.onstart = () => {
+      startTimeRef.current = Date.now();
+      estimatedDurationRef.current = message.length * 60; // Adjusted for better accuracy
+      setProgress(0);
+      cancelAnimationFrame(animationRef.current);
+      animateProgress();
+    };
   }, [message]);
 
   const animateProgress = () => {
@@ -115,8 +116,14 @@ const SpeechPlayer = ({ message }) => {
         </button>
       </div>
       <div className="relative w-[65vw] h-1 bg-gray-300 rounded-full mt-2">
-        <div className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-200 ease-linear" style={{ width: `${progress}%` }}></div>
-        <div className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-200 ease-linear" style={{ left: `${progress}%` }}></div>
+        <div
+          className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-100 ease-linear"
+          style={{ width: `${progress}%` }}
+        ></div>
+        <div
+          className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-100 ease-linear"
+          style={{ left: `${progress}%`, transform: "translateX(-50%)" }}
+        ></div>
       </div>
       <a
         href={audioURL}
@@ -129,7 +136,6 @@ const SpeechPlayer = ({ message }) => {
     </div>
   );
 };
-
 
 SpeechPlayer.propTypes = {
   message: PropTypes.string.isRequired,
