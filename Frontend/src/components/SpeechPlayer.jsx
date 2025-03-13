@@ -11,11 +11,11 @@ const SpeechPlayer = ({ message }) => {
 
   const synth = useRef(window.speechSynthesis);
   const utteranceRef = useRef(null);
-  const lastCharIndex = useRef(0);
   const animationRef = useRef(null);
+  const lastCharIndex = useRef(0);
   const startTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
-  const isManualUpdate = useRef(false);
+  const resumeOffsetRef = useRef(0); // Track offset for resuming  
 
   useEffect(() => {
     if (!synth.current) {
@@ -48,25 +48,20 @@ const SpeechPlayer = ({ message }) => {
     };
 
     utterance.onboundary = (event) => {
-      if (!isManualUpdate.current) {
-        lastCharIndex.current = event.charIndex;
-        const wordProgress = (event.charIndex / message.length) * 100;
-        setProgress((prev) => Math.max(prev, wordProgress)); // Ensure progress moves forward smoothly
-      }
+      lastCharIndex.current = event.charIndex;
+      const wordProgress = (event.charIndex / message.length) * 100;
+      setProgress((prev) => Math.max(prev, wordProgress)); // Ensure progress moves forward smoothly
     };
 
     utterance.onstart = () => {
       startTimeRef.current = Date.now();
-      estimatedDurationRef.current = message.length * 60; // More precise timing
-      setProgress(0);
-      cancelAnimationFrame(animationRef.current);
+      estimatedDurationRef.current = message.length * 60; // More accurate estimate
+      setProgress(resumeOffsetRef.current); // Use saved progress if resuming
       animateProgress();
     };
   }, [message]);
 
   const animateProgress = () => {
-    isManualUpdate.current = true; // Prevents immediate boundary jumps
-
     const update = () => {
       if (!synth.current.speaking || isPaused) {
         cancelAnimationFrame(animationRef.current);
@@ -88,22 +83,26 @@ const SpeechPlayer = ({ message }) => {
     if (!synth.current) return;
 
     if (synth.current.speaking && !synth.current.paused) {
+      // PAUSE
       synth.current.pause();
+      resumeOffsetRef.current = progress; // Save progress
       setIsPaused(true);
       setIsPlaying(false);
       cancelAnimationFrame(animationRef.current);
     } else if (isPaused) {
+      // RESUME
       synth.current.resume();
       setIsPaused(false);
       setIsPlaying(true);
-      animateProgress();
+      animateProgress(); // Restart animation
     } else {
+      // START
       synth.current.cancel();
       setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
       lastCharIndex.current = 0;
-      isManualUpdate.current = false; // Allows smoother boundary updates
+      resumeOffsetRef.current = 0; // Reset resume offset
       synth.current.speak(utteranceRef.current);
       animateProgress();
     }
