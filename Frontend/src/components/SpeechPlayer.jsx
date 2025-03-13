@@ -18,17 +18,16 @@ const SpeechPlayer = ({ message }) => {
 
   const animateProgress = useCallback(() => {
     const update = () => {
-      if (!synth.current.speaking || isPaused) {
-        cancelAnimationFrame(animationRef.current);
-        return;
-      }
+      if (isPaused) return; 
 
       const elapsed = Date.now() - startTimeRef.current;
       const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
 
-      setProgress(Math.min(estimatedProgress, 100));
+      setProgress((prev) => Math.max(prev, Math.min(estimatedProgress, 100)));
 
-      animationRef.current = requestAnimationFrame(update);
+      if (estimatedProgress < 100 && synth.current.speaking) {
+        animationRef.current = requestAnimationFrame(update);
+      }
     };
 
     cancelAnimationFrame(animationRef.current);
@@ -63,7 +62,7 @@ const SpeechPlayer = ({ message }) => {
       setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
-      animateProgress();
+      setTimeout(() => animateProgress(), 50); 
     };
 
     utterance.onend = () => {
@@ -116,11 +115,11 @@ const SpeechPlayer = ({ message }) => {
       </div>
       <div className="relative w-[65vw] h-1 bg-gray-300 rounded-full mt-2">
         <div
-          className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-100 ease-linear"
+          className="absolute top-0 left-0 h-1 bg-orange-400 rounded-full transition-all duration-[50ms] ease-linear"
           style={{ width: `${progress}%` }}
         ></div>
         <div
-          className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-100 ease-linear"
+          className="absolute bottom-[-5px] w-4 h-4 bg-orange-500 rounded-full transition-all duration-[50ms] ease-linear"
           style={{ left: `${progress}%`, transform: "translateX(-50%)" }}
         ></div>
       </div>
