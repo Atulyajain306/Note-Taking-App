@@ -16,22 +16,25 @@ const SpeechPlayer = ({ message }) => {
   const pauseTimeRef = useRef(null);
   const estimatedDurationRef = useRef(null);
 
+  
   const animateProgress = useCallback(() => {
     const update = () => {
-      if (isPaused) return; // Prevent animation while paused
+      if (!synth.current.speaking || isPaused) {
+        cancelAnimationFrame(animationRef.current);
+        return;
+      }
 
       const elapsed = Date.now() - startTimeRef.current;
-      const estimatedProgress = (elapsed / estimatedDurationRef.current) * 100;
+      const newProgress = (elapsed / estimatedDurationRef.current) * 100;
 
-      setProgress((prev) => Math.max(prev, Math.min(estimatedProgress, 100)));
+      setProgress((prev) => Math.min(Math.max(prev, newProgress), 100));
 
-      if (estimatedProgress < 100 && synth.current.speaking) {
-        animationRef.current = requestAnimationFrame(update);
-      }
+      animationRef.current = requestAnimationFrame(update);
     };
 
-    cancelAnimationFrame(animationRef.current);
-    animationRef.current = requestAnimationFrame(update);
+    if (!isPaused) {
+      animationRef.current = requestAnimationFrame(update);
+    }
   }, [isPaused]);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ const SpeechPlayer = ({ message }) => {
       setProgress(0);
       setIsPlaying(true);
       setIsPaused(false);
-      setTimeout(() => animateProgress(), 50); // Delay to ensure speech starts
+      animateProgress();
     };
 
     utterance.onend = () => {
@@ -87,8 +90,8 @@ const SpeechPlayer = ({ message }) => {
       synth.current.resume();
       setIsPaused(false);
       setIsPlaying(true);
-      startTimeRef.current += Date.now() - pauseTimeRef.current;
-      animateProgress();
+      startTimeRef.current += Date.now() - pauseTimeRef.current; // Adjust start time
+      animateProgress(); 
     } else {
       synth.current.cancel();
       setProgress(0);
@@ -96,7 +99,7 @@ const SpeechPlayer = ({ message }) => {
       setIsPaused(false);
       startTimeRef.current = Date.now();
       synth.current.speak(utteranceRef.current);
-      animateProgress();
+      animateProgress(); // ✅ Start animation
     }
   };
 
