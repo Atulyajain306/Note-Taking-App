@@ -32,7 +32,9 @@ const HandleCreation = () => {
           toast.error("Session Expired Please Login again");
 
         }
+        else{
         console.log(error);
+        }
       }
   }
   return {Notecreation}

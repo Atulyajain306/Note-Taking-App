@@ -18,7 +18,16 @@ const HandleAudiomessages = () => {
             toast.success("Audio Note Added");
            }catch(error)
            {
-            console.log(error)
+            if(error.message==="Token not Assigned"){
+                  localStorage.removeItem("item");
+                  setauthUser(null);
+                  setProfilepic(null);
+                  toast.error("Session Expired Please Login again");
+        
+                }
+                else{
+                console.log(error);
+                }
            }
      }
      return {Audiomessage}

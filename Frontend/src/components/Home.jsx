@@ -27,7 +27,7 @@ const Home = () => {
        const [name, setname] = useState([]);
        const [color,setcolor]=useState(false);
   const {Listening,transcript,startListening,stopListening,setLoad}=Handlespeechtotext({continuous:true});
-       const {savedmessages,setsavedmessages,profilepic}=useAuthContext();
+       const {savedmessages,setsavedmessages,profilepic,setProfilepic,setauthUser}=useAuthContext();
        const Edit=["Create Notes","No Favourites Added","No Related titles Found"];
         const [bgtitle, setbgtitle] = useState("Create Notes");
         const {loading}=Handlecards();
@@ -49,6 +49,18 @@ const Home = () => {
             headers:{"Content-Type":"application/json"}
           });
           const data=await res.json();
+          if(data.error){
+            if(error.message==="Token not Assigned"){
+              localStorage.removeItem("item");
+              setauthUser(null);
+              setProfilepic(null);
+              toast.error("Session Expired Please Login again");
+    
+            }
+            else{
+            console.log(error);
+            }
+          }
           let rr=sortMessages(data)
           setCards(rr);
          

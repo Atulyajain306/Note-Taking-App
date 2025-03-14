@@ -29,7 +29,7 @@ const Card = ({bgtitle,setCards}) => {
     const [newtitle,setnewtitle]=useState("");
     const [title, settitle] = useState(false);
     const [enlarge, setenlarge] = useState(false);
-    const {savedmessages,setsavedmessages,singleMessage,setsingleMessage,updated,setupdated}=useAuthContext();
+    const {savedmessages,setsavedmessages,setauthUser,setProfilepic,singleMessage,setsingleMessage,updated,setupdated}=useAuthContext();
     const { handleEdit}=HandleEdit();
     const {handleremove}=HandleDelete(); 
     const {handlebody}=Handlenewbody();
@@ -54,6 +54,17 @@ const Card = ({bgtitle,setCards}) => {
       headers:{"Content-Type":"application/json"}
     });
     const data=await res.json();
+    if (data.error){
+      if(error.message==="Token not Assigned"){
+        localStorage.removeItem("item");
+        setauthUser(null);
+        setProfilepic(null);
+        toast.error("Session Expired Please Login again");
+      }
+      else{
+      console.log(error);
+      }
+    }
     let rr=sortMessages(data)
     setCards(rr);
 },[setCards]) 
