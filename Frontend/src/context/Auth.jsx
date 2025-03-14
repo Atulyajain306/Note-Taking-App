@@ -1,4 +1,4 @@
-import  {useState,useEffect} from 'react'
+import  {useState} from 'react'
 import PropTypes from "prop-types";
 import { AuthContext } from './AuthContext';
 
@@ -10,16 +10,8 @@ const [singleMessage,setsingleMessage] = useState(null)
 const [favourates,setfavourates] = useState([])
 const [updated, setupdated] = useState(null)
 const [savedmessages,setsavedmessages] = useState([]);
-useEffect(() => {
-  if (authUser) {
-    localStorage.setItem("AuthUser", JSON.stringify(authUser));
-    setIsAuth(true);
-  } else {
-    localStorage.removeItem("AuthUser");
-    setauthUser(null);
-    setIsAuth(false);
-  }
-}, [authUser]);       
+
+
  return(<AuthContext.Provider value={{authUser,setauthUser,isAuth,setIsAuth,savedmessages,setsavedmessages,favourates,setfavourates,profilepic,setProfilepic,singleMessage,setsingleMessage,updated,setupdated}}>
             {children}
         </AuthContext.Provider>)

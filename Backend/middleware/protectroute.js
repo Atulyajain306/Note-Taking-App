@@ -8,7 +8,7 @@ const protectroute = async(req,res,next) => {
           } 
           const decoded = jwt.verify(t,process.env.JWT_KEY);
           if(!decoded){
-           return  res.status(401).json({error:"Token Assigned expired"});
+           return  res.status(401).json({error:"Token not Assigned"});
           }
         
           req.user=decoded;

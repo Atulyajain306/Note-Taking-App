@@ -25,6 +25,13 @@ const HandleCreation = () => {
           toast.success("Note Added");
 
       }catch(error){
+        if(error.message==="Token not Assigned"){
+          localStorage.removeItem("item");
+          setauthUser(null);
+          setProfilepic(null);
+          toast.error("Session Expired Please Login again");
+
+        }
         console.log(error);
       }
   }
