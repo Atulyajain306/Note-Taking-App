@@ -1,7 +1,7 @@
 import toast from "react-hot-toast"
 import { useAuthContext } from "../context/AuthContext";
 const HandleFavourate = () => {
-    const {favourates,setfavourates,savedmessages,setsavedmessages}=useAuthContext();
+    const {favourates,setfavourates,savedmessages,setsavedmessages,setProfilepic,setauthUser}=useAuthContext();
    const Liked=async(_id)=>{
       try{
          let res=await fetch("https://note-taking-app-8825.onrender.com/favourite/true",{

@@ -4,7 +4,7 @@ import { useEffect,useState } from 'react';
 import toast from "react-hot-toast"
 
 const Handlecards = () => {
-    const {savedmessages,setsavedmessages,setfavourates}=useAuthContext();
+    const {savedmessages,setsavedmessages,setfavourates,setProfilepic,setauthUser}=useAuthContext();
     const [loading,setloading]=useState();
 
    const card=useCallback(async()=>{

@@ -1,7 +1,7 @@
 import { useAuthContext } from "../context/AuthContext";
 import toast from "react-hot-toast"
 const HandleAudiomessages = () => {
-    const {savedmessages,setsavedmessages}=useAuthContext();
+    const {savedmessages,setsavedmessages,setProfilepic,setauthUser}=useAuthContext();
      const Audiomessage=async(transcript)=>{
            try{
                  const res= await fetch("https://note-taking-app-8825.onrender.com/audiomessage",{

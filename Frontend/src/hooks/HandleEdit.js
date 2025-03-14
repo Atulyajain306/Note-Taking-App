@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 const HandleEdit = () => {
-    const {savedmessages,setsavedmessages}=useAuthContext();
+    const {savedmessages,setsavedmessages,setProfilepic,setauthUser}=useAuthContext();
   
     const handleEdit=async(newtitle,_id)=>{
          try{

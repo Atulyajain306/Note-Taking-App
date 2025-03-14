@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 const Handlenewtitle = () => {
-         const {setsingleMessage,savedmessages,setsavedmessages,setupdated}=useAuthContext();
+         const {setsingleMessage,savedmessages,setsavedmessages,setupdated,setProfilepic,setauthUser}=useAuthContext();
      const cardtitlenew=async (popuptitle,id)=>{
           try{
                const res=await fetch(`https://note-taking-app-8825.onrender.com/newtitle`,{

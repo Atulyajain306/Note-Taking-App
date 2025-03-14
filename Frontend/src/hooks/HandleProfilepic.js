@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 const HandleProfilepic = () => {
-    const {setProfilepic}=useAuthContext();
+    const {setProfilepic,setauthUser}=useAuthContext();
   const Profilepic=async(formdata,id)=>{
      try{
           let res=await fetch(`https://note-taking-app-8825.onrender.com/upload/profilepic/${id}`,{

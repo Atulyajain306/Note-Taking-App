@@ -1,7 +1,7 @@
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 const HandleDelete = () => {
-    const {setsavedmessages}=useAuthContext();
+    const {setsavedmessages,setProfilepic,setauthUser}=useAuthContext();
    const handleremove=async(id)=>{
         try{
                console.log("id",id);

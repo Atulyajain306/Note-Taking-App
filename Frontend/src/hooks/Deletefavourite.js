@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
 
 const Deletefavourite = () => {
-       const {favourates,setfavourates,savedmessages,setsavedmessages}=useAuthContext();
+       const {favourates,setfavourates,setauthUser,setProfilepic,savedmessages,setsavedmessages}=useAuthContext();
     const Deleted=async(_id)=>{
           try{
               let res= await fetch("https://note-taking-app-8825.onrender.com/favourite/false",{
