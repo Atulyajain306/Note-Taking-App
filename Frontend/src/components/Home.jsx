@@ -1,6 +1,7 @@
 import "../App.css"
 import { MdOutlineSpeakerNotes } from "react-icons/md";
 import { IoHomeSharp } from "react-icons/io5";
+import toast from "react-hot-toast"
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaStar } from "react-icons/fa";
 import { ImSpinner3 } from "react-icons/im";
