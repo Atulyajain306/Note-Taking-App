@@ -10,7 +10,15 @@ const [singleMessage,setsingleMessage] = useState(null)
 const [favourates,setfavourates] = useState([])
 const [updated, setupdated] = useState(null)
 const [savedmessages,setsavedmessages] = useState([]);
-          
+useEffect(() => {
+  if (authUser) {
+    localStorage.setItem("item", JSON.stringify(authUser));
+    setIsAuth(true);
+  } else {
+    localStorage.removeItem("item");
+    setIsAuth(false);
+  }
+}, [authUser]);       
  return(<AuthContext.Provider value={{authUser,setauthUser,isAuth,setIsAuth,savedmessages,setsavedmessages,favourates,setfavourates,profilepic,setProfilepic,singleMessage,setsingleMessage,updated,setupdated}}>
             {children}
         </AuthContext.Provider>)
