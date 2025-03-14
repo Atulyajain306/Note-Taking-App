@@ -12,10 +12,11 @@ const [updated, setupdated] = useState(null)
 const [savedmessages,setsavedmessages] = useState([]);
 useEffect(() => {
   if (authUser) {
-    localStorage.setItem("item", JSON.stringify(authUser));
+    localStorage.setItem("AuthUser", JSON.stringify(authUser));
     setIsAuth(true);
   } else {
-    localStorage.removeItem("item");
+    localStorage.removeItem("AuthUser");
+    setauthUser(null);
     setIsAuth(false);
   }
 }, [authUser]);       
