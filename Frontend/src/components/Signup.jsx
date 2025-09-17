@@ -19,7 +19,7 @@ const Signup = () => {
      
   return (
     <div>
-        <div className='text-5xl font-bold  text-center py-5 '>Note Taking App</div>
+        <div className='text-5xl font-bold  text-center py-5 italic'>ByteNotes</div>
        <div className="flex flex-col items-center py-5 justify-center bg-white">
       <div className="w-full max-w-md p-8 space-y-6 bg-slate-300 shadow-lg rounded-2xl">
         <h2 className="text-2xl font-bold text-center text-gray-900">Create an Account</h2>
