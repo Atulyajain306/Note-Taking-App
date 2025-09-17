@@ -15,7 +15,7 @@ const Login = () => {
      }
   return (
     <div className="min-h-screen bg-white" >
-         <div className="text-5xl font-bold  text-center py-5">Note Taking App</div>
+         <div className="text-5xl font-bold  text-center py-5 italic">ByteNotes</div>
       <div className="flex relative top-28 items-center justify-center">
       <div className="w-full max-w-md p-8 space-y-6 border  bg-slate-300 shadow-md rounded-2xl">
         <h2 className="text-2xl font-bold text-center text-gray-900">Login to Your Account</h2>
